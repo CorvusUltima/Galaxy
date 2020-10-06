@@ -16,10 +16,10 @@ private:
 		{
 			sound
 		};
+
 		void Draw(Graphics& gfx, Type& type,int x,int y);
-	
-		Type type;
-		Graphics gfx;
+
+		Type& type;
 		int position = 1;
 		bool ButtonIsAddet = false;
 		Surface sound;
@@ -27,15 +27,18 @@ private:
 
 public:
 	
-	 Menu() = default;
+	Menu(Graphics& gfx);
+	Menu() = default;
 	void DrawMenu(Graphics& gfx);
+	Menu() = default;
 
 private:
 
 	
 	Graphics& gfx;
-	Button::Type& type;
 	Vec2 pos = {gfx.ScreenWidth-200,100};
+	static const int nButtonsMax = 10;
+	Button buttons[nButtonsMax];
 	int nbuttons=1;
 
 
