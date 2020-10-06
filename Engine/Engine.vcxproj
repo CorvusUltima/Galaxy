@@ -149,6 +149,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="img.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="Numbers.h" />
     <ClInclude Include="RectF.h" />
     <ClInclude Include="rng.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Numbers.cpp" />
     <ClCompile Include="RectF.cpp" />
@@ -251,7 +253,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\avantura.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\Down.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\intro.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sound.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\vol1.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\vol11.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\vol111.bmp" />

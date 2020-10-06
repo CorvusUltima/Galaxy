@@ -33,6 +33,7 @@
 #include"Surface.h"
 #include"Enemy.h"
 #include"CircleF.h"
+#include"menu.h"
 
 
 class Game
@@ -68,13 +69,16 @@ private:
 	GameState GS;
 	int x = 400;
 	int y = 300;
+	Enemy  testEnemy;
 	Defender def;
 	Surface surf = Surface("vol333.bmp");
 	Surface intro = Surface("intro.bmp");
-	Enemy  testEnemy;
+	Surface down = Surface("Down.bmp");
+	Surface sound = Surface("sound.bmp");
 	CircleF cf;
+	Menu menu;
 	int test = 0;
 	Vec2 kita{ 50.0f,50.0f };
 	int slider = 0;
-	void Gif6(int& slider, Graphics& gfx, Vec2& centar, const std::string& vol1,const std::string& vol2, const std::string& vol3, const std::string& vol4, const std::string& vol5, const std::string& vol6);	
+	void Gif6(int& slider, Graphics& gfx,Vec2& centar, const std::string& vol1,const std::string& vol2, const std::string& vol3, const std::string& vol4, const std::string& vol5, const std::string& vol6);	
 }; 

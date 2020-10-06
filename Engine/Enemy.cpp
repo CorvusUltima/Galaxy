@@ -23,8 +23,8 @@ void Enemy::Update(float dt, Graphics& gfx)
 	if (!bDead)
 	{
 		fMoveTimer += 2.4f * dt;
-		pos.x += 400.0f * cos(fMoveTimer) * dt;
-		pos.y += 0.0f * dt;
+		pos.x += 650.0f * cos(fMoveTimer) * dt;
+		pos.y += 280.0f * sin(fMoveTimer)*dt;
 
 		reload -= dt;
 		if (reload > 0) reload -= dt;

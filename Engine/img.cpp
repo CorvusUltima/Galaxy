@@ -2062,36 +2062,36 @@ void img::Gif6(int&slider, Graphics& gfx,  Vec2& centar, const std::string& vol1
 
 	if (slider > 0 && slider< 20)
 	{
-		gfx.DrawSprite(centar.x,centar.y, s1);
+		gfx.DrawSprite(int(centar.x),int(centar.y),s1);
 	}
 	
 	if (slider > 20 && slider < 30)
 
 	{
-		gfx.DrawSprite(centar.x, centar.y, s2);
+		gfx.DrawSprite(int(centar.x),int( centar.y), s2);
 	}
 
 
 	if (slider > 30 && slider < 40)
 
 	{
-		gfx.DrawSprite(centar.x, centar.y, s3);
+		gfx.DrawSprite(int(centar.x),int( centar.y), s3);
 	}
 
 	if (slider > 40 && slider < 50)
 
 	{
-		gfx.DrawSprite(centar.x, centar.y, s4);;
+		gfx.DrawSprite (int(centar.x),int(centar.y), s4);;
 	}
 	if (slider > 40 && slider < 50)
 
 	{
-		gfx.DrawSprite(centar.x, centar.y, s5);
+		gfx.DrawSprite(int(centar.x), int(centar.y), s5);
 	}
 	if (slider > 50 && slider < 60)
 
 	{
-		gfx.DrawSprite(centar.x, centar.y, s6);;
+		gfx.DrawSprite(int(centar.x), int(centar.y), s6);;
 	}
 	
 	slider = 0;
