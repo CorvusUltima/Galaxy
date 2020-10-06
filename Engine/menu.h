@@ -6,6 +6,8 @@
 #include"Graphics.h"
 class Menu
 {
+public:
+	Menu(Graphics& gfx);
 private:
 	class Button
 	{
@@ -16,27 +18,25 @@ private:
 		{
 			sound
 		};
-		void Draw(Graphics& gfx, Type& type,int x,int y);
+		void Draw(Graphics& gfx, int x,int y);
 	
 		Type type;
-		Graphics gfx;
 		int position = 1;
 		bool ButtonIsAddet = false;
 		Surface sound;
 	};
 
 public:
-	
-	 Menu() = default;
-	void DrawMenu(Graphics& gfx);
+
+	void DrawMenu();
 
 private:
 
 	
 	Graphics& gfx;
-	Button::Type& type;
 	Vec2 pos = {gfx.ScreenWidth-200,100};
 	int nbuttons=1;
+	Button buttons[10];
 
 
 
