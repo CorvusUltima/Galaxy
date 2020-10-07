@@ -251,5 +251,8 @@
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sound.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\soundSelect.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

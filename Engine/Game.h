@@ -75,6 +75,7 @@ private:
 	Surface intro = Surface("intro.bmp");
 	Surface down = Surface("Down.bmp");
 	Surface sound = Surface("sound.bmp");
+	Surface soundSelect = Surface("soundSelect.bmp");
 	CircleF cf;
 	Menu menu;
 	int test = 0;

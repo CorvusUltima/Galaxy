@@ -4,6 +4,7 @@
 #include"Surface.h"
 #include"Colors.h"
 #include"Graphics.h"
+#include"Mouse.h"
 class Menu
 {
 public:
@@ -16,14 +17,20 @@ private:
 		
 		enum class Type
 		{
-			sound
+			sound,
+			soundSelect
 		};
+
 		void Draw(Graphics& gfx, int x,int y);
+		void Update();
+		bool IsInside(RectF& button, Mouse& mouse);
 	
 		Type type;
 		int position = 1;
 		bool ButtonIsAddet = false;
 		Surface sound;
+		Surface soundSelect;
+
 	};
 
 public:

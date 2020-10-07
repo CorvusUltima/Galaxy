@@ -151,7 +151,6 @@ void Game::Gif6(int& slider, Graphics& gfx, Vec2& centar, const  std::string& vo
 void Game::ComposeFrame()
 { 
    // gfx.DrawSprite(0,0, surf);
-    gfx.DrawSprite(gfx.ScreenWidth/2-100,100,sound);
     space.Draw(gfx);
     def.Draw(gfx);
     for (auto b : def.bullets) b->Draw(gfx);
