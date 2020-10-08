@@ -1,21 +1,32 @@
 #include "menu.h"
 
 
+
+
+
+
+
+
+
+
+Menu::Button::Button(Vec2& topLeft)
+{
+	rect = RectF(topLeft, width, height);
+}
+
 void Menu::Button::Draw(Graphics& gfx, int x, int y)
 {
 
 	if (type == Type::sound)
 	{
-		gfx.DrawSprite(x, y, sound);
-		position++;
+		gfx.DrawSprite(0,0, sound);
 	}
 }
 
-void Menu::Button::Update()
-{
-}
 
-bool Menu::Button::IsInside(RectF& button, Mouse& mouse)
+
+
+bool Menu::Button::IsInside(const RectF& button, Mouse& mouse)
 {
 	       const int lmX = mouse.GetPosX();
 		   const int lmY = mouse.GetPosY();
@@ -25,18 +36,20 @@ bool Menu::Button::IsInside(RectF& button, Mouse& mouse)
 }
 
 
+
 Menu::Menu(Graphics& gfx)
 	:
 	gfx(gfx)
 {
 }
 
+
 void Menu::DrawMenu()
 {
 	
 	for (int i = 0; i < nbuttons; i++)
 	{
-		if (i == 1 )buttons[i].type = Button::Type::sound;
+		if (i ==0)buttons[i].type = Button::Type::sound;
 		
 		buttons[i].Draw(gfx, pos.x, pos. y);
 	}

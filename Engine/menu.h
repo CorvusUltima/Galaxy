@@ -13,24 +13,29 @@ private:
 	class Button
 	{
 	public:
-     
-		
 		enum class Type
 		{
 			sound,
 			soundSelect
 		};
 
+	public:
+		Button(Vec2& topLeft);
 		void Draw(Graphics& gfx, int x,int y);
-		void Update();
-		bool IsInside(RectF& button, Mouse& mouse);
+		bool IsInside(const RectF& button, Mouse& mouse);
+		
+	public:
 	
+		RectF rect;
 		Type type;
 		int position = 1;
 		bool ButtonIsAddet = false;
-		Surface sound;
-		Surface soundSelect;
+		static constexpr int width = 200;
+		static constexpr int height = 100;
 
+	public:
+		Surface sound = Surface("sound.bmp");
+		Surface soundSelect = Surface("soundSelect.bmp");
 	};
 
 public:
@@ -42,7 +47,7 @@ private:
 	
 	Graphics& gfx;
 	Vec2 pos = {gfx.ScreenWidth-200,100};
-	int nbuttons=1;
+    int nbuttons=1;
 	Button buttons[10];
 
 
