@@ -14,12 +14,12 @@ Menu::Button::Button(Vec2& topLeft)
 	rect = RectF(topLeft, width, height);
 }
 
-void Menu::Button::Draw(Graphics& gfx, int x, int y)
+void Menu::Button::Draw(Graphics& gfx,int  x,int y)
 {
 
 	if (type == Type::sound)
 	{
-		gfx.DrawSprite(0,0, sound);
+		gfx.DrawSprite(0.,0, sound);
 	}
 }
 
@@ -37,20 +37,26 @@ bool Menu::Button::IsInside(const RectF& button, Mouse& mouse)
 
 
 
-Menu::Menu(Graphics& gfx)
+Menu::Menu(const Vec2& topleft, int nbuttons)
 	:
-	gfx(gfx)
+	topleft(topleft)
 {
+
+	for ( int i = 0; i < nbuttons; i++)
+	{
+		Button(Vec2(topleft.x,topleft.y + (Button::height * i)),  Button::width, Button::height);
+	}
+
 }
 
 
-void Menu::DrawMenu()
+void Menu::DrawMenu(Graphics& gfx)
 {
 	
-	for (int i = 0; i < nbuttons; i++)
+	for (int i = 0.0f; i < nbuttons; i++)
 	{
 		if (i ==0)buttons[i].type = Button::Type::sound;
 		
-		buttons[i].Draw(gfx, pos.x, pos. y);
+		buttons[i].Draw(gfx,topleft.x,topleft. y);
 	}
 }

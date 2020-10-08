@@ -155,7 +155,7 @@ void Game::ComposeFrame()
     def.Draw(gfx);
     for (auto b : def.bullets) b->Draw(gfx);
     gfx.DrawSprite(gfx.ScreenWidth-20, 0, down);
-    menu.DrawMenu();
+    menu.DrawMenu(gfx);
     if (!testEnemy.DoDefenderColision(def))
     {
         testEnemy.Draw(gfx);

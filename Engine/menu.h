@@ -8,7 +8,7 @@
 class Menu
 {
 public:
-	Menu(Graphics& gfx);
+	
 private:
 	class Button
 	{
@@ -20,6 +20,7 @@ private:
 		};
 
 	public:
+		Button() = default;
 		Button(Vec2& topLeft);
 		void Draw(Graphics& gfx, int x,int y);
 		bool IsInside(const RectF& button, Mouse& mouse);
@@ -30,8 +31,8 @@ private:
 		Type type;
 		int position = 1;
 		bool ButtonIsAddet = false;
-		static constexpr int width = 200;
-		static constexpr int height = 100;
+		static constexpr float width = 200.0f;
+		static constexpr float height = 100.0f;
 
 	public:
 		Surface sound = Surface("sound.bmp");
@@ -39,14 +40,12 @@ private:
 	};
 
 public:
-
-	void DrawMenu();
-
+	Menu(const Vec2& topleft, int nbuttons);
+	void DrawMenu(Graphics& gfx);
+	
 private:
 
-	
-	Graphics& gfx;
-	Vec2 pos = {gfx.ScreenWidth-200,100};
+	Vec2 topleft;
     int nbuttons=1;
 	Button buttons[10];
 
