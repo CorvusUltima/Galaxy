@@ -22,14 +22,14 @@
 #include "Game.h"
 #include<iostream>
 
-Game::Game( MainWindow& wnd )
-	:
-	wnd( wnd ),
-	gfx( wnd ),
+Game::Game(MainWindow& wnd)
+    :
+    wnd(wnd),
+    gfx(wnd),
     space(fWorldSpeed, gfx),
     def(Vec2(400.0f, 300.0f), 300.0f),
     testEnemy(Vec2(400.0f, 100.0f)),
-    menu(gfx)
+    menu(Vec2(50,0),2)
    
     
 { 
@@ -156,6 +156,7 @@ void Game::ComposeFrame()
     for (auto b : def.bullets) b->Draw(gfx);
     gfx.DrawSprite(gfx.ScreenWidth-20, 0, down);
     menu.DrawMenu(gfx);
+    menu.Update(wnd.kbd);
     if (!testEnemy.DoDefenderColision(def))
     {
         testEnemy.Draw(gfx);
@@ -164,9 +165,5 @@ void Game::ComposeFrame()
     for (auto b : testEnemy.bullets) b->Draw(gfx);
     test++;
     
-    if (GS == GameState::GamePaused)
-    {
-        gfx.DrawSprite(0, 0, intro);
-    }
 }
 

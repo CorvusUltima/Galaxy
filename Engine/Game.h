@@ -72,7 +72,6 @@ private:
 	Enemy  testEnemy;
 	Defender def;
 	Surface surf = Surface("vol333.bmp");
-	Surface intro = Surface("intro.bmp");
 	Surface down = Surface("Down.bmp");
 	CircleF cf;
 	Menu menu;
