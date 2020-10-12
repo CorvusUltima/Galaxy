@@ -16,25 +16,23 @@ private:
 	public:
 		enum class Type
 		{
+			uninitialized, //Needed something to stop constructor from complaining
 			sound,
 			soundSelect
 		};
 
-	public:
 		Button() = default;
 		Button(Vec2& topLeft);
-		void Draw(Graphics& gfx, int x,int y);
-		void Update(Vec2& selector);
-		
-	public:
+		void Draw(Graphics& gfx);
+
 	
-		RectF rect;
-		Type type;
+		RectF rect = { 0, 0, 0, 0 };
+		Type type = Type::uninitialized;
 		bool IsSelected = false;
 		static constexpr float width = 200.0f;
 		static constexpr float height = 100.0f;
 
-	public:
+
 		Surface sound = Surface("sound.bmp");
 		Surface soundSelect = Surface("soundSelect.bmp");
 	};
@@ -42,20 +40,15 @@ private:
 public:
 	Menu(const Vec2& topleft, int nbuttons);
 	void DrawMenu(Graphics& gfx);
-	void Update(Keyboard& kbd);
-	
-	
+	void Update(Keyboard& kbd, float dt);	
 	
 private:
 
-
 	Vec2 topleft;
-    int nbuttons=1;
+    int nbuttons=0;
 	Button buttons[10];
 	Vec2 selector;
-
-
-
+	float fSelectorMoveCooldown = 0;
 
 };
 

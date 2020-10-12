@@ -15,85 +15,84 @@ Menu::Button::Button(Vec2& topLeft)
 }
 
 
-void Menu::Button::Draw(Graphics& gfx,int  x,int y)
+void Menu::Button::Draw(Graphics& gfx)
 {
-
-	if (type == Type::sound&&!IsSelected)
+	//Now using switch statement to determine which button to draw
+	switch (type)
 	{
-		gfx.DrawSprite(int(rect.left), int(rect.top), sound);
-	}
-	else if (type == Type::sound && IsSelected)
-	{
-
-		gfx.DrawSprite(int(rect.left), int(rect.top), soundSelect);
+	case Type::sound:
+		if(!IsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), sound);
+		else gfx.DrawSprite(int(rect.left), int(rect.top), soundSelect);
+		break;
 	}
 }
-
-void Menu::Button::Update(Vec2& selector)
-{
-	if (selector.y ==rect.GetCenter().y)
-	{
-
-		IsSelected = true;
-	}
-}
-
-
-
-
-
 
 
 Menu::Menu(const Vec2& topleft, int nbuttons)
 	:
-	topleft(topleft)
+	topleft(topleft),
+	nbuttons(nbuttons)
 {
 
 	for ( int i = 0; i < nbuttons; i++)
 	{
 		buttons[i] = { Vec2(topleft.x,topleft.y + (Button::height * i)) };
+
+		switch (i)  //Initialize button types
+		{
+		case 0:
+			buttons[i].type = Button::Type::sound;
+			break;
+		case 1:
+			buttons[i].type = Button::Type::sound;
+			break;
+		case 2:
+			buttons[i].type = Button::Type::sound;
+			break;
+		case 3:
+			buttons[i].type = Button::Type::sound;
+			break;
+		case 4:
+			buttons[i].type = Button::Type::sound;
+			break;
+		}
 	}
 
-	selector.y = buttons[0].rect.GetCenter().y;
-	selector.x = buttons[0].rect.right + 5.0f;
+	selector = { buttons[0].rect.right + 5.0f, buttons[0].rect.GetCenter().y };
 
 }
 
 
 void Menu::DrawMenu(Graphics& gfx)
 {
-
-	
-	buttons[0].type = Button::Type::sound;
-	buttons[1].type = Button::Type::sound;
-	buttons[2].type = Button::Type::sound;
-
-		buttons[0].Draw(gfx, topleft.x, topleft.y );
-		buttons[1].Draw(gfx, topleft.x, topleft.y );
-		
-
+	for (int i = 0; i < nbuttons; i++)
+	{
+		buttons[i].Draw(gfx);
+	}
 }
 
-void Menu::Update(Keyboard& kbd)
+void Menu::Update(Keyboard& kbd, float dt)
 {
-	if (kbd.KeyIsPressed(VK_UP) && selector.y > buttons[0].height+topleft.y)
+	//Updating selector position
+	fSelectorMoveCooldown -= dt;
+	if (fSelectorMoveCooldown <= 0)
 	{
-		selector.y -= buttons[0].height;
+		if (kbd.KeyIsPressed(VK_UP) && selector.y > buttons[0].rect.bottom) //Check if selector is currently pointing below the first menu button
+		{
+			selector.y -= Button::height;
+		}
+		if (kbd.KeyIsPressed(VK_DOWN) && selector.y < buttons[nbuttons - 1].rect.top) //Check if selector is currently pointing abow the menu button ([nbuttons - 1] pointing to the last one)
+		{
+			selector.y += Button::height;
+		}
+		fSelectorMoveCooldown = 0.3f;
 	}
-	if (kbd.KeyIsPressed(VK_DOWN) && selector.y < buttons[nbuttons].height + topleft.y)
-	{
-		selector.y += buttons[0].height;
-	}
+	if(!kbd.KeyIsPressed(VK_UP) && !kbd.KeyIsPressed(VK_DOWN)) fSelectorMoveCooldown = 0; //Put selector off cooldown if commands for moving it aren't being pressed
 
-	if (selector.y ==buttons[nbuttons].rect.GetCenter().y)
+	//Check and update which button is currently selected
+	for (int i = 0; i < nbuttons; i++)
 	{
-
-		buttons[nbuttons].IsSelected = true;
-	}
-	else if(selector.y != buttons[nbuttons].rect.GetCenter().y)
-	{
-
-		buttons[nbuttons].IsSelected = false;
+		buttons[i].IsSelected = selector.y > buttons[i].rect.top && selector.y < buttons[i].rect.bottom;
 	}
 }
 
