@@ -41,14 +41,6 @@ void Menu::Button::Update(Vec2& selector)
 
 
 
-bool Menu::Button::IsInside(const RectF& button, Mouse& mouse)
-{
-	       const int lmX = mouse.GetPosX();
-		   const int lmY = mouse.GetPosY();
-		return lmX > button.left && lmX <button.right && lmY >button.top && lmY < button.bottom ;
-	
-	
-}
 
 
 
@@ -71,12 +63,15 @@ Menu::Menu(const Vec2& topleft, int nbuttons)
 void Menu::DrawMenu(Graphics& gfx)
 {
 
-
+	
 	buttons[0].type = Button::Type::sound;
 	buttons[1].type = Button::Type::sound;
-	buttons[0].Draw(gfx, topleft.x, topleft.y+Button::height*0);
-	buttons[1].Draw(gfx, topleft.x, topleft.y + Button::height);
-	
+	buttons[2].type = Button::Type::sound;
+
+		buttons[0].Draw(gfx, topleft.x, topleft.y );
+		buttons[1].Draw(gfx, topleft.x, topleft.y );
+		
+
 }
 
 void Menu::Update(Keyboard& kbd)

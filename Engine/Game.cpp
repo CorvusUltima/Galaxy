@@ -29,7 +29,7 @@ Game::Game(MainWindow& wnd)
     space(fWorldSpeed, gfx),
     def(Vec2(400.0f, 300.0f), 300.0f),
     testEnemy(Vec2(400.0f, 100.0f)),
-    menu(Vec2(50,0),2)
+    menu(Vec2(400,0),2)
    
     
 { 
@@ -155,8 +155,11 @@ void Game::ComposeFrame()
     def.Draw(gfx);
     for (auto b : def.bullets) b->Draw(gfx);
     gfx.DrawSprite(gfx.ScreenWidth-20, 0, down);
+    for (int i = 0; i < 2; i++)
+   
     menu.DrawMenu(gfx);
     menu.Update(wnd.kbd);
+    
     if (!testEnemy.DoDefenderColision(def))
     {
         testEnemy.Draw(gfx);

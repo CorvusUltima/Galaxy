@@ -25,13 +25,11 @@ private:
 		Button(Vec2& topLeft);
 		void Draw(Graphics& gfx, int x,int y);
 		void Update(Vec2& selector);
-		bool IsInside(const RectF& button, Mouse& mouse);
 		
 	public:
 	
 		RectF rect;
 		Type type;
-		bool ButtonIsAddet = false;
 		bool IsSelected = false;
 		static constexpr float width = 200.0f;
 		static constexpr float height = 100.0f;
