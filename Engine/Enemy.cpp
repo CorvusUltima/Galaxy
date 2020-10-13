@@ -1,71 +1,155 @@
 #include "Enemy.h"
 
-Enemy::Enemy(const Vec2& pos)
+Enemy::Enemy(const Model model, const Vec2& pos, const MovePattern MovePattern, const FirePattern FirePattern)
 	:
+	model(model),
 	pos(pos)
 {
+	movePattern = MovePattern;
+	firePattern = FirePattern;
+
+	switch (model)
+	{
+	case Model::test:
+		width = 40.0f;
+		height = 40.0f;
+		speed = 60.0f;
+		health_max = 90.0f;
+		dmg = 10.0f;
+		collision_dmg = 100.0f;
+		reloadTime_max = 1.2f;
+		if(MovePattern == MovePattern::ModelDefault) movePattern = MovePattern::Sinusoid_Down;
+		if(FirePattern == FirePattern::ModelDefault) firePattern = FirePattern::SingleBullet_Down;
+		break;
+	case Model::Mine:
+		width = 58.0f;
+		height = 58.0f;
+		speed = 30.0f;
+		health_max = 350.0f;
+		collision_dmg = 250.0f;
+		if (MovePattern == MovePattern::ModelDefault) movePattern = MovePattern::StraightDown;
+		if (FirePattern == FirePattern::ModelDefault) firePattern = FirePattern::None;
+		break;
+	}
+	health_current = health_max;
+	reloadTime_current = reloadTime_max;
+	colRadius = std::max(width, height) / 2.0f;
+	fMoveTimer = 0;
+
 }
 
 void Enemy::Draw(Graphics& gfx)
 {
-	int x = int(pos.x - width / 2.0f);
-	int y = int(pos.y - height / 2.0f);
-	if (!bDead)
+	const Vec2 HP_Bar_topleft = Vec2(pos.x - width / 2.0f, pos.y - height / 2.0f - 10.0f);
+
+	switch (model)
 	{
-		img::TestEnemy(x, y, gfx);
-		img::HP_Bar(Vec2((float)x, (float)y - 10.0f), width, 5.0f, healthMax, health, gfx);
+	case Model::test:
+		img::TestEnemy(pos, gfx);
+		break;
+	case Model::Mine:
+		img::Enemy_Mine(pos, gfx);
+		break;
 	}
+
+	img::HP_Bar(HP_Bar_topleft, width, 5.0f, health_max, health_current, gfx);
 }
 
 void Enemy::Update(float dt, Graphics& gfx)
 {
-	bDead = health <= 0;
-	if (!bDead)
-	{
-		fMoveTimer += 2.4f * dt;
-		pos.x += 650.0f * cos(fMoveTimer) * dt;
-		pos.y += 280.0f * sin(fMoveTimer)*dt;
+	if( health_current <= 0 ||
+		(pos.y - height / 2.0f > (float)gfx.ScreenBottom + 15.0f)) //Enemy (and his health bar) went down off screen boundaries
+		bDead = true;
 
-		reload -= dt;
-		if (reload > 0) reload -= dt;
-		else
-		{
-			Shoot();
-			reload = 0.6f;
-		}
+	if (pos.y - height / 2.0f <= (float)gfx.ScreenBottom + 15.0f) //Move and shoot only if enemy (and his health bar) didn't go thorugh the bottom of the screen
+	{
+		Move(dt);
+		Shoot();
 	}
+	reloadTime_current -= dt;
 }
 
 void Enemy::TakeDmg(float dmg)
 {
-	health -= dmg;
+	health_current -= dmg;
 }
 
-const Vec2& Enemy::GetPos()
+Vec2 Enemy::GetPos() const
 {
 	return pos;
 }
 
-bool Enemy::DoDefenderColision(Defender& def)
+float Enemy::GetDmg() const
 {
-	CircleF  cf;
-	float R = 50.0f;
+	return dmg;
+}
 
-	if (cf.isInside(pos.x,pos.y,R,def.pos.x,def.pos.y))
+bool Enemy::hasCrashedInto(const CircleF& circle)
+{
+	if (GetColCircle().IsOverLapingWith(circle))
 	{
-
+		bDead = true;
 		return true;
 	}
+	else return false;
+}
 
+bool Enemy::hasCrashedInto(const Vec2& coordinate)
+{
+	if (GetColCircle().isContaining(coordinate))
+	{
+		bDead = true;
+		return true;
+	}
+	else return false;
+}
+
+CircleF Enemy::GetColCircle() const
+{
+	return CircleF(pos, colRadius);
+}
+
+void Enemy::mark_remove(Graphics& gfx)
+{
+	if (bDead) pos.y = (float)gfx.ScreenBottom + 15.0f + height / 2.0f;
+}
+
+
+const int Enemy::BulletCount() const
+{
+	return (int)bullets.size();
+}
+
+void Enemy::Move(float dt)
+{
+	pos.y += speed * dt;
+	switch (movePattern)
+	{
+	case MovePattern::StraightDown:
+		break;
+	case MovePattern::Sinusoid_Down:
+		fMoveTimer += 2.4f * dt;
+		pos.x += 400.0f * cos(fMoveTimer) * dt;
+		break;
+	}
+	
 }
 
 void Enemy::Shoot()
 {
 	const float bottom = pos.y + height / 2;
 
-	if (reload <= 0)
+	if (reloadTime_current <= 0)
 	{
-		reload = 0.4f;
-		bullets.push_back(new Bullet(Vec2(pos.x, bottom), dmg, false));
+		reloadTime_current = reloadTime_max;
+
+		switch (firePattern)
+		{
+		case FirePattern::None:
+			break;
+		case FirePattern::SingleBullet_Down:
+			bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, bottom), 6.0f), Vec2(0.0f, 1.0f), Colors::Red, 500.0f, dmg));
+			break;
+		}
 	}
 }

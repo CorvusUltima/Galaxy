@@ -20,19 +20,19 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include<iostream>
 
-Game::Game(MainWindow& wnd)
-    :
-    wnd(wnd),
-    gfx(wnd),
+Game::Game( MainWindow& wnd )
+	:
+	wnd( wnd ),
+	gfx( wnd ),
     space(fWorldSpeed, gfx),
-    def(Vec2(400.0f, 300.0f), 300.0f),
-    testEnemy(Vec2(400.0f, 100.0f)),
-    menu(Vec2(400,0),5)
-   
+    btn_diff_easy({ 200.0f, 295.0f, 500.0f, 535.0f }, Surface("btn_easy_unselected.bmp"), Surface("btn_easy_hovered.bmp"), Surface("btn_easy_selected.bmp")),
+    btn_diff_normal({ 299.0f, 449.0f, 500.0f, 535.0f }, Surface("btn_normal_unselected.bmp"), Surface("btn_normal_hovered.bmp"), Surface("btn_normal_selected.bmp")),
+    btn_diff_hard({ 454.0f, 554.0f, 500.0f, 535.0f }, Surface("btn_hard_unselected.bmp"), Surface("btn_hard_hovered.bmp"), Surface("btn_hard_selected.bmp")),
+    btn_start_inactive({550.0f, 670.0f, 600.0f, 635.0f}, Surface("btn_StartInactive.bmp"), Surface("btn_StartInactive.bmp"), Surface("btn_StartInactive.bmp")),
+    btn_start_active({ 550.0f, 670.0f, 600.0f, 635.0f }, Surface("btn_StartActive_unselected.bmp"), Surface("btn_StartActive_hovered.bmp"), Surface("btn_StartActive_hovered.bmp"))
     
-{ 
+{
 }
 
 void Game::Go()
@@ -51,121 +51,142 @@ void Game::Go()
 }
 
 void Game::UpdateModel(float dt)
-{
-    menu.Update(wnd.kbd, dt);
-    
-    if (wnd.kbd.KeyIsPressed(VK_SPACE))
+{    
+    switch (GameState)
     {
-        GS = GameState::GameOn;
-    }
-    if (GS != GameState::GameOn)
-    {
-        GS = GameState::GamePaused;
-   }
-    
-    
-    switch (GS)
-    {
-    case Game::GameState::GameOn:
+    case GameState::SelectionScreen:
+
+        Vec2 dir = { 0, 0 };
+        if (wnd.kbd.KeyIsPressed(VK_LEFT)) dir.x -= 1.0f;
+        if (wnd.kbd.KeyIsPressed(VK_RIGHT)) dir.x += 1.0f;
+        if (wnd.kbd.KeyIsPressed(VK_UP)) dir.y -= 1.0f;
+        if (wnd.kbd.KeyIsPressed(VK_DOWN)) dir.y += 1.0f;
+        pointer += dir.GetNormalized() * 300.0f * dt;
+
+        btn_diff_easy.Update(wnd.kbd, pointer);
+        if (btn_diff_easy.bSelected)
+        {
+            btn_diff_normal.bSelected = false;
+            btn_diff_hard.bSelected = false;
+        }
+        btn_diff_normal.Update(wnd.kbd, pointer);
+        if (btn_diff_normal.bSelected)
+        {
+            btn_diff_easy.bSelected = false;
+            btn_diff_hard.bSelected = false;
+        }
+        btn_diff_hard.Update(wnd.kbd, pointer);
+        if (btn_diff_hard.bSelected)
+        {
+            btn_diff_easy.bSelected = false;
+            btn_diff_normal.bSelected = false;
+        }
+
+        if (btn_diff_easy.bSelected || btn_diff_normal.bSelected || btn_diff_hard.bSelected) btn_start_active.Update(wnd.kbd, pointer); //Able to start game only if difficulty is selected
+        if (btn_start_active.bSelected) GameState = GameState::Loading;
+
+        break;
+
+    case GameState::Loading:
+
+        Defender::Difficulty diff;
+        diff = Defender::Difficulty::Easy;
+        if (btn_diff_easy.bSelected) diff = Defender::Difficulty::Easy;
+        else if (btn_diff_normal.bSelected) diff = Defender::Difficulty::Normal;
+        else if (btn_diff_hard.bSelected) diff = Defender::Difficulty::Hard;
+        def = { Vec2(400.0f, 600.0f), Defender::Model::Interceptor, diff };
+        GameState = GameState::Playing;
+        break;
+
+    case Game::GameState::Playing:
+
+        fElapsedTime += dt; //Measures time passed from the start of the game
+        nWave = -1 + (int)(fElapsedTime / 3.0f); //Increases the wave by 1 every 3 seconds (temporary)
+        SpawnWave(nWave);  //Spawn the current wave of enemies
+
+        while(enemy.size() < 2) enemy.push_back(std::make_unique <Enemy>(Enemy::Model::test, Vec2(rng::rdm_float(330.0f, 830.0f), 50.0f))); //Infinite enemies just for testing
 
         space.Update(dt, gfx);
         def.Update(wnd.kbd, gfx, dt);
-        for (auto b : def.bullets)
+        for (int i = 0; i < def.bullets.size(); i++) //Update defender bullets
         {
-            b->Update(dt);
-            if (!testEnemy.bDead && b->bHitTarget(testEnemy.GetPos(), testEnemy.colRadius))
+            def.bullets[i]->Update(dt);
+            def.bullets[i]->delete_offscreen(gfx); //Mark bullets that are off screen to be deleted
+            for (int j = 0; j < enemy.size(); j++)
+            if (def.bullets[i]->isTargetHit(CircleF(enemy[j]->GetColCircle()))) //Check collision against all enemies
             {
-                testEnemy.TakeDmg(def.dmg);
-                gfx.DrawSprite((int)b->pos.x, (int)(b->pos.y - b->radius), surf);
+                enemy[j]->TakeDmg(def.GetDmg());
+                explo.push_back(std::make_unique<Explosion>(def.bullets[i]->circle.center, Explosion::Size::Small)); //Create explosion at the site of impact
+            }
+            if (def.bullets[i]->bDeleted) def.bullets.erase(std::remove(def.bullets.begin(), def.bullets.end(), def.bullets[i])); //Delete bullets if needed
+            
+        }
+        for (int i = 0; i < enemy.size(); i++) //Update enemies
+        {
+            enemy[i]->Update(dt, gfx);
+            if (enemy[i]->hasCrashedInto(def.GetPos())) def.TakeDmg(enemy[i]->collision_dmg); //Check if enemy crashed into defender
+            for (int j = 0; j < enemy[i]->bullets.size(); j++) //Update bullets for all enemies
+            {
+                enemy[i]->bullets[j]->Update(dt, def.GetPos());
+                enemy[i]->bullets[j]->delete_offscreen(gfx); //Mark bullets that are off screen to be deleted
+                if (enemy[i]->bullets[j]->isTargetHit(def.GetColCircle())) //Check collision against the defender
+                {
+                    def.TakeDmg(enemy[i]->GetDmg());
+                    explo.push_back(std::make_unique<Explosion>(enemy[i]->bullets[j]->circle.center, Explosion::Size::Small)); //Create explosion at the site of impact
+                }
+                if (enemy[i]->bullets[j]->bDeleted) enemy[i]->bullets.erase(std::remove(enemy[i]->bullets.begin(), enemy[i]->bullets.end(), enemy[i]->bullets[j])); //Delete bullets if needed
+            }
+            if (enemy[i]->bDead) //Check if any enemy is dead
+            {
+                explo.push_back(std::make_unique<Explosion>(enemy[i]->GetPos(), Explosion::Size::Medium)); //Create explosion where enemy died
+                enemy[i]->mark_remove(gfx); //Mark enemies that need to be deleted
+                if(enemy[i]->BulletCount() == 0) enemy.erase(std::remove(enemy.begin(), enemy.end(), enemy[i])); //Delete dead enemies when all their bullets are deleted
             }
         }
-        testEnemy.Update(dt, gfx);
-        for (auto b : testEnemy.bullets)
+        for (int i = 0; i < explo.size(); i++) //Update and delete explosions
         {
-            b->Update(dt);
-            b->bHitTarget(def.GetPos(), def.colRadius);
-
+            explo[i]->Update(dt);
+            if (explo[i]->bExpired) explo.erase(std::remove(explo.begin(), explo.end(), explo[i]));
         }
-        testEnemy.DoDefenderColision(def);
         break;
-    case Game::GameState::GamePaused:
+    case Game::GameState::Paused:
         break;
     }
    
    
 }
-
-void Game::Gif6(int& slider, Graphics& gfx, Vec2& centar, const  std::string& vol1, const std::string& vol2, const std::string& vol3, const  std::string& vol4, const std::string& vol5, const  std::string& vol6)
-
-    {
-        Surface s1 = Surface(vol1);
-        Surface s2 = Surface(vol2);
-        Surface s3 = Surface(vol3);
-        Surface s4 = Surface(vol4);
-        Surface s5 = Surface(vol5);
-        Surface s6 = Surface(vol6);
-
-
-        slider++;
-
-        if (slider > 0 && slider < 1)
-        {
-            gfx.DrawSprite(centar.x, centar.y, s1);
-        }
-
-        if (slider > 1 && slider < 2)
-
-        {
-            gfx.DrawSprite(centar.x, centar.y, s2);
-        }
-
-
-        if (slider >2&& slider <3)
-
-        {
-            gfx.DrawSprite(centar.x, centar.y, s3);
-        }
-
-        if (slider >3 && slider <4)
-
-        {
-            gfx.DrawSprite(centar.x, centar.y, s4);;
-        }
-        if (slider > 4 && slider <6)
-
-        {
-            gfx.DrawSprite(centar.x, centar.y, s5);
-        }
-        if (slider >6&& slider <8)
-
-        {
-            gfx.DrawSprite(centar.x, centar.y, s6);;
-        }
-
-        
-    
-}
-
-
-
 
 void Game::ComposeFrame()
 { 
-   // gfx.DrawSprite(0,0, surf);
-    space.Draw(gfx);
-    def.Draw(gfx);
-    for (auto b : def.bullets) b->Draw(gfx);
-    gfx.DrawSprite(gfx.ScreenWidth-20, 0, down);
-   
-    menu.DrawMenu(gfx);
-    
-    if (!testEnemy.DoDefenderColision(def))
+    switch (GameState)
     {
-        testEnemy.Draw(gfx);
+    case GameState::Playing:
 
+        space.Draw(gfx); //Background
+        def.Draw(gfx); //Defender
+        for (int i = 0; i < def.bullets.size(); i++) def.bullets[i]->Draw(gfx); //Defender bullets
+
+        for (int i = 0; i < enemy.size(); i++) //Enemies
+        {
+            enemy[i]->Draw(gfx);
+            for (int j = 0; j < enemy[i]->bullets.size(); j++) enemy[i]->bullets[j]->Draw(gfx); //Enemy bullets
+        }
+
+        for (int i = 0; i < explo.size(); i++) explo[i]->Draw(gfx); //Explosions
+
+        break;
+
+    case GameState::SelectionScreen:
+
+        btn_diff_easy.Draw(gfx);
+        btn_diff_normal.Draw(gfx);
+        btn_diff_hard.Draw(gfx);
+        if (btn_diff_easy.bSelected || btn_diff_normal.bSelected || btn_diff_hard.bSelected) btn_start_active.Draw(gfx);
+        else btn_start_inactive.Draw(gfx);
+
+        gfx.DrawCircleEmpty((int)pointer.x, (int)pointer.y, 6, Colors::Orange); //Pointer
+
+        break;
     }
-    for (auto b : testEnemy.bullets) b->Draw(gfx);
-    test++;
-    
 }
 

@@ -1,46 +1,57 @@
 #include "Bullet.h"
 
-Bullet::Bullet(const Vec2& pos, float dmg, bool friendly)
+Bullet::Bullet(const CircleF& circle, const Vec2& dir, const Color& c, float speed, float dmg, bool homing)
 	:
-	pos(pos),
+	circle(circle),
+	c(c),
+	dir(dir),
+	speed(speed),
 	dmg(dmg),
-	bFriendly(friendly)
+	bHoming(homing)
 {
-	if (bFriendly) c = Colors::Cyan;
-	else c = Colors::Red;
+	c_base = c;
 }
 
-void Bullet::Update(float dt)
+void Bullet::Update(float dt, const Vec2& target)
 {
-	if (!bDeleted)
-	{
-		if (bFriendly) pos.y -= speed * dt;
-		else pos.y += speed * dt;
-	}
+	if (target.x >= 0) //Aquire target only if it is initialized
+		if (bHoming && isTargetAquired(target))
+		{
+			float c_changer = rng::rdm_float(0.0f, 1.0f);
+			c = Color((int)((float)c_base.GetR() * c_changer), (int)((float)c_base.GetG() * c_changer), (int)((float)c_base.GetB() * c_changer)); //Blinking color while projectile is following the target
+			dir = target - circle.center; //Follow target if it's inside detection radius
+		}
+		else c = c_base; //Reset the color to original if target is not in site anymore
+	circle.center += dir.GetNormalized() * speed * dt;
 }
 
 void Bullet::Draw(Graphics& gfx)
 {
-	if(!bDeleted) gfx.DrawCircle((int)pos.x, (int)pos.y, (int)radius, c);
+	gfx.DrawCircle((int)circle.center.x, (int)circle.center.y, (int)circle.r, c);
 }
 
-void Bullet::Mark_Delete(Graphics& gfx)
+void Bullet::delete_offscreen(Graphics& gfx)
 {
-	if (pos.x < 0 || pos.x > gfx.ScreenWidth || pos.y < 0 || pos.y > gfx.ScreenHeight) bDeleted = true;
+	const int left = (int)(circle.center.x - circle.r);
+	const int right = (int)(circle.center.x + circle.r);
+	const int top = (int)(circle.center.y - circle.r);
+	const int bottom = (int)(circle.center.y + circle.r);
+	if (right < gfx.ScreenLeft || left > gfx.ScreenRight || bottom < gfx.ScreenTop || top > gfx.ScreenBottom) bDeleted = true;
 }
 
-bool Bullet::bHitTarget(const Vec2& collision_center, float collision_radius)
+bool Bullet::isTargetHit(const CircleF& target)
 {
-	if (!bDeleted)
-	{
-		const float length0 = (collision_center - pos).GetLengthSq();
-		const float length1 = (collision_radius + radius) * (collision_radius + radius);
-		if ((collision_center - pos).GetLengthSq() < (collision_radius + radius) * (collision_radius + radius))
+		if (circle.IsOverLapingWith(target))
 		{
 			bDeleted = true;
 			return true;
 		}
 		else return false;
-	}
-	return false;
 }
+
+bool Bullet::isTargetAquired(const Vec2& target)
+{
+	CircleF detection_circle(circle.center, DetectionRadius);
+	return detection_circle.isContaining(target);
+}
+

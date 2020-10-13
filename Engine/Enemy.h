@@ -6,34 +6,64 @@
 #include"Keyboard.h"
 #include "Bullet.h"
 #include"CircleF.h"
-#include"Defender.h"
+#include <memory>
 
 class Enemy
 {
 public:
-	Enemy(const Vec2& pos);
+	enum class Model
+	{
+		test,
+		Mine
+	};
+	enum class MovePattern
+	{
+		StraightDown,
+		Sinusoid_Down,
+		ModelDefault
+	};
+	enum class FirePattern
+	{
+		None,
+		SingleBullet_Down,
+		ModelDefault
+	};
+	Enemy(const Model model, const Vec2& pos,
+		const MovePattern MovePattern = MovePattern::ModelDefault, const FirePattern FirePattern = FirePattern::ModelDefault);
 	void Draw(Graphics& gfx);
 	void Update(float dt, Graphics& gfx);
 	void TakeDmg(float dmg);
-	const Vec2& GetPos();
-	bool DoDefenderColision(Defender&def);
+	Vec2 GetPos() const;
+	float GetDmg() const;
+	bool hasCrashedInto(const CircleF& circle);
+	bool hasCrashedInto(const Vec2& coordinate);
+	CircleF GetColCircle() const;
+	void mark_remove(Graphics& gfx);
 
-	float colRadius = 30.0f;
+	float collision_dmg = 0;
 	bool bDead = false;
 
-	std::vector<Bullet*> bullets;
+	std::vector < std::unique_ptr<Bullet>> bullets;
+	const int BulletCount() const; //Used to determine if enemy should beremoved from game
+
 private:
+	void Move(float dt);
 	void Shoot();
 
+	Model model;
+	MovePattern movePattern = MovePattern::ModelDefault;
+	FirePattern firePattern = FirePattern::ModelDefault;
 	Vec2 pos;
-	static constexpr float width = 40;
-	static constexpr  float height = 40;
-	float speed = 200.0f;
-	float healthMax = 200.0f;
-	float health = 200.0f;
+	float width = 0;
+	float height = 0;
+	float colRadius = 0;
+	float speed = 0;
+	float health_max = 0;
+	float health_current = health_max;
 	float dmg = 0;
 	float fMoveTimer = 0;
-	float reload = 0.4f;
+	float reloadTime_max = 0;
+	float reloadTime_current = reloadTime_max;
 
 };
 

@@ -111,12 +111,12 @@ Graphics::Graphics( HWNDKey& key )
 
 	// set viewport dimensions
 	D3D11_VIEWPORT vp;
-	vp.Width = float( Graphics::ScreenWidth );
-	vp.Height = float( Graphics::ScreenHeight );
+	vp.Width = float( Graphics::ScreenWidth + 300 );
+	vp.Height = float( Graphics::ScreenHeight + 300 );
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0.0f;
-	vp.TopLeftY = 0.0f;
+	vp.TopLeftX = -150.0f;
+	vp.TopLeftY = -150.0f;
 	pImmediateContext->RSSetViewports( 1,&vp );
 
 

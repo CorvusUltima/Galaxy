@@ -96,7 +96,10 @@
     <ClInclude Include="CircleF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="menu.h">
+    <ClInclude Include="Explosion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -159,9 +162,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CircleF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,13 +245,40 @@
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\intro.bmp">
       <Filter>Source Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\Down.bmp">
+    <Image Include="btn_StartActive_hovered.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sound.bmp">
+    <Image Include="btn_StartActive_unselected.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\soundSelect.bmp">
+    <Image Include="btn_easy_hovered.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_easy_selected.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_easy_unselected.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_hard_hovered.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_hard_selected.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_hard_unselected.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_normal_hovered.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_normal_selected.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_normal_unselected.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="btn_StartInactive.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

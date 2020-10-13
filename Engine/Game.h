@@ -32,8 +32,10 @@
 #include"Defender.h"
 #include"Surface.h"
 #include"Enemy.h"
+#include "Explosion.h"
 #include"CircleF.h"
-#include"menu.h"
+#include "Button.h"
+#include <memory>
 
 
 class Game
@@ -59,24 +61,54 @@ private:
 	Space space;
 	enum class GameState
 	{
-		GameOn,
-		GamePaused
+		SelectionScreen,
+		Loading,
+		Playing,
+		Paused
 	};
 	/********************************/
-
-
-	//Testing purposes:
-	GameState GS;
-	int x = 400;
-	int y = 300;
-	Enemy  testEnemy;
+	GameState GameState = GameState::SelectionScreen;
+	Vec2 pointer = { 600.0f, 500.0f };
+	Button btn_diff_easy;
+	Button btn_diff_normal;
+	Button btn_diff_hard;
+	Button btn_start_inactive;
+	Button btn_start_active;
 	Defender def;
-	Surface surf = Surface("vol333.bmp");
-	Surface down = Surface("Down.bmp");
-	CircleF cf;
-	Menu menu;
-	int test = 0;
-	Vec2 kita{ 50.0f,50.0f };
-	int slider = 0;
-	void Gif6(int& slider, Graphics& gfx,Vec2& centar, const std::string& vol1,const std::string& vol2, const std::string& vol3, const std::string& vol4, const std::string& vol5, const std::string& vol6);	
+	
+	std::vector < std::unique_ptr < Enemy > > enemy; //Enemies
+	std::vector < std::unique_ptr < Explosion > > explo; //Explosions (visual purposes)
+
+	float fElapsedTime = 0;
+
+	int nWave = -1; //Current wave of enemies
+	static constexpr int nWavesMax = 100;
+	bool isSpawned[nWavesMax] = { false }; //Bool for checking if the particular wave of enemies has already been spawned
+
+
+	/**************************************   L E V E L   C R E A T I O N   **************************************/
+	void SpawnWave(int wave)
+	{
+		if (wave >= 0 && wave < nWavesMax)
+		{
+			if (!isSpawned[wave])
+			{
+				switch (wave)
+				{
+				case 0:
+					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::test, Vec2(400.0f, 50.0f)));
+					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::test, Vec2(800.0f, 50.0f)));
+					break;
+				case 1:
+					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::Mine, Vec2(200.0f, 50.0f)));
+					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::Mine, Vec2(1000.0f, 50.0f)));
+					break;
+				default:
+					break;
+				}
+			}
+			isSpawned[wave] = true;
+		}
+	}
+	/*************************************************************************************************************/
 }; 
