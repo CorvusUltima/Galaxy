@@ -55,3 +55,4 @@ bool Bullet::isTargetAquired(const Vec2& target)
 	return detection_circle.isContaining(target);
 }
 
+
