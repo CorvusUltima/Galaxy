@@ -26,11 +26,14 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
     space(fWorldSpeed, gfx),
-    btn_diff_easy({ 200.0f, 295.0f, 500.0f, 535.0f }, Surface("btn_easy_unselected.bmp"), Surface("btn_easy_hovered.bmp"), Surface("btn_easy_selected.bmp")),
-    btn_diff_normal({ 299.0f, 449.0f, 500.0f, 535.0f }, Surface("btn_normal_unselected.bmp"), Surface("btn_normal_hovered.bmp"), Surface("btn_normal_selected.bmp")),
-    btn_diff_hard({ 454.0f, 554.0f, 500.0f, 535.0f }, Surface("btn_hard_unselected.bmp"), Surface("btn_hard_hovered.bmp"), Surface("btn_hard_selected.bmp")),
-    btn_start_inactive({550.0f, 670.0f, 600.0f, 635.0f}, Surface("btn_StartInactive.bmp"), Surface("btn_StartInactive.bmp"), Surface("btn_StartInactive.bmp")),
-    btn_start_active({ 550.0f, 670.0f, 600.0f, 635.0f }, Surface("btn_StartActive_unselected.bmp"), Surface("btn_StartActive_hovered.bmp"), Surface("btn_StartActive_hovered.bmp"))
+    btn_diff_easy({ 350.0f, 445.0f, 550.0f, 585.0f }, Surface("btn_easy_unselected.bmp"), Surface("btn_easy_hovered.bmp"), Surface("btn_easy_selected.bmp")),
+    btn_diff_normal({ 520.0f, 670.0f, 550.0f, 585.0f }, Surface("btn_normal_unselected.bmp"), Surface("btn_normal_hovered.bmp"), Surface("btn_normal_selected.bmp")),
+    btn_diff_hard({ 745.0f, 845.0f, 550.0f, 585.0f }, Surface("btn_hard_unselected.bmp"), Surface("btn_hard_hovered.bmp"), Surface("btn_hard_selected.bmp")),
+    btn_start_inactive({530.0f, 650.0f, 700.0f, 735.0f}, Surface("btn_StartInactive.bmp"), Surface("btn_StartInactive.bmp"), Surface("btn_StartInactive.bmp")),
+    btn_start_active({ 530.0f, 650.0f, 700.0f, 735.0f }, Surface("btn_StartActive_unselected.bmp"), Surface("btn_StartActive_hovered.bmp"), Surface("btn_StartActive_hovered.bmp")),
+    btn_interceptor({ 260.0f, 390.0f, 180.0f, 290.0f }, Surface("btn_Interceptor_unselected.bmp"), Surface("btn_Interceptor_hovered.bmp"), Surface("btn_Interceptor_selected.bmp")),
+    btn_destroyer({ 530.0f, 660.0f, 180.0f, 290.0f }, Surface("btn_Destroyer_unselected.bmp"), Surface("btn_Destroyer_hovered.bmp"), Surface("btn_Destroyer_selected.bmp")),
+    btn_battleship({ 800.0f, 930.0f, 180.0f, 290.0f }, Surface("btn_Battleship_unselected.bmp"), Surface("btn_Battleship_hovered.bmp"), Surface("btn_Battleship_selected.bmp"))
     
 {
 }
@@ -56,13 +59,35 @@ void Game::UpdateModel(float dt)
     {
     case GameState::SelectionScreen:
 
+        //Pointer movement
         Vec2 dir = { 0, 0 };
         if (wnd.kbd.KeyIsPressed(VK_LEFT)) dir.x -= 1.0f;
         if (wnd.kbd.KeyIsPressed(VK_RIGHT)) dir.x += 1.0f;
         if (wnd.kbd.KeyIsPressed(VK_UP)) dir.y -= 1.0f;
         if (wnd.kbd.KeyIsPressed(VK_DOWN)) dir.y += 1.0f;
-        pointer += dir.GetNormalized() * 300.0f * dt;
+        pointer += dir.GetNormalized() * 500.0f * dt;
 
+        //Defender selection
+        btn_interceptor.Update(wnd.kbd, pointer);
+        if (btn_interceptor.bSelected)
+        {
+            btn_destroyer.bSelected = false;
+            btn_battleship.bSelected = false;
+        }
+        btn_destroyer.Update(wnd.kbd, pointer);
+        if (btn_destroyer.bSelected)
+        {
+            btn_interceptor.bSelected = false;
+            btn_battleship.bSelected = false;
+        }
+        btn_battleship.Update(wnd.kbd, pointer);
+        if (btn_battleship.bSelected)
+        {
+            btn_interceptor.bSelected = false;
+            btn_destroyer.bSelected = false;
+        }
+
+        //Difficulty selection
         btn_diff_easy.Update(wnd.kbd, pointer);
         if (btn_diff_easy.bSelected)
         {
@@ -82,19 +107,25 @@ void Game::UpdateModel(float dt)
             btn_diff_normal.bSelected = false;
         }
 
-        if (btn_diff_easy.bSelected || btn_diff_normal.bSelected || btn_diff_hard.bSelected) btn_start_active.Update(wnd.kbd, pointer); //Able to start game only if difficulty is selected
+        //Able to start game only if aircraft and difficulty is selected
+        if ((btn_interceptor.bSelected || btn_destroyer.bSelected || btn_battleship.bSelected)
+            && (btn_diff_easy.bSelected || btn_diff_normal.bSelected || btn_diff_hard.bSelected))
+            btn_start_active.Update(wnd.kbd, pointer);
         if (btn_start_active.bSelected) GameState = GameState::Loading;
 
         break;
 
     case GameState::Loading:
 
+        Defender::Model model;
         Defender::Difficulty diff;
-        diff = Defender::Difficulty::Easy;
+        if (btn_interceptor.bSelected) model = Defender::Model::Interceptor;
+        else if (btn_destroyer.bSelected) model = Defender::Model::Destroyer;
+        else if (btn_battleship.bSelected) model = Defender::Model::Battleship;
         if (btn_diff_easy.bSelected) diff = Defender::Difficulty::Easy;
         else if (btn_diff_normal.bSelected) diff = Defender::Difficulty::Normal;
         else if (btn_diff_hard.bSelected) diff = Defender::Difficulty::Hard;
-        def = { Vec2(400.0f, 600.0f), Defender::Model::Interceptor, diff };
+        def = { Vec2(400.0f, 600.0f), model, diff };
         GameState = GameState::Playing;
         break;
 
@@ -124,7 +155,7 @@ void Game::UpdateModel(float dt)
         for (int i = 0; i < enemy.size(); i++) //Update enemies
         {
             enemy[i]->Update(dt, gfx);
-            if (enemy[i]->hasCrashedInto(def.GetPos())) def.TakeDmg(enemy[i]->collision_dmg); //Check if enemy crashed into defender
+            if (enemy[i]->hasCrashedInto(def.GetColCircle())) def.TakeDmg(enemy[i]->collision_dmg); //Check if enemy crashed into defender
             for (int j = 0; j < enemy[i]->bullets.size(); j++) //Update bullets for all enemies
             {
                 enemy[i]->bullets[j]->Update(dt, def.GetPos());
@@ -178,10 +209,15 @@ void Game::ComposeFrame()
 
     case GameState::SelectionScreen:
 
+        btn_interceptor.Draw(gfx);
+        btn_destroyer.Draw(gfx);
+        btn_battleship.Draw(gfx);
         btn_diff_easy.Draw(gfx);
         btn_diff_normal.Draw(gfx);
         btn_diff_hard.Draw(gfx);
-        if (btn_diff_easy.bSelected || btn_diff_normal.bSelected || btn_diff_hard.bSelected) btn_start_active.Draw(gfx);
+        if ((btn_interceptor.bSelected || btn_destroyer.bSelected || btn_battleship.bSelected)
+            && (btn_diff_easy.bSelected || btn_diff_normal.bSelected || btn_diff_hard.bSelected))
+            btn_start_active.Draw(gfx);
         else btn_start_inactive.Draw(gfx);
 
         gfx.DrawCircleEmpty((int)pointer.x, (int)pointer.y, 6, Colors::Orange); //Pointer

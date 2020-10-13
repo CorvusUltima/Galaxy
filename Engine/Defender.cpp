@@ -10,8 +10,8 @@ Defender::Defender(const Vec2& pos, const Model model, const Difficulty diff)
     switch (model)
     {
     case Model::Interceptor:
-        width = 75.0f;
-        height = 60.0f;
+        width = 50.0f;
+        height = 50.0f;
         speed = 480.0f;
         health_max = 400.0f;
         reloadTime_max = 0.08f;
@@ -20,35 +20,36 @@ Defender::Defender(const Vec2& pos, const Model model, const Difficulty diff)
         bulletRadius = 2.0f;
         break;
     case Model::Destroyer:
-        width = 75.0f;
-        height = 60.0f;
-        speed = 0;
-        health_max = 1000.0f;
-        reloadTime_max = 0.3f;
-        dmg = 30.0f;
-        bulletSpeed = 500.0f;
-        bulletRadius = 0;
+        width = 70.0f;
+        height = 80.0f;
+        speed = 360.0f;
+        health_max = 600.0f;
+        reloadTime_max = 1.2f;
+        dmg = 60.0f;
+        bulletSpeed = 900.0f;
+        bulletRadius = 8.0f;
         break;
     case Model::Battleship:
-        width = 75.0f;
-        height = 60.0f;
-        speed = 0;
-        health_max = 1000.0f;
-        shield_max = 0;
-        shield_recharge = 3.0f;
-        reloadTime_max = 0.3f;
+        width = 120.0f;
+        height = 100.0f;
+        speed = 240.0f;
+        health_max = 600.0f;
+        shield_max = 600.0f;
+        shield_recharge = 6.0f;
+        reloadTime_max = 0.7f;
         dmg = 30.0f;
         bulletSpeed = 500.0f;
-        bulletRadius = 0;
+        bulletRadius = 9.0f;
         break;
     }
 
     health_max *= diff_multiplier;
     health_current = health_max;
+    shield_max *= diff_multiplier;
     shield_current = shield_max;
     dmg *= diff_multiplier;
     reloadTime_current = 0.0f;
-    colRadius = std::max(width, height) / 2.0f;
+    colRadius = std::min(width, height) / 2.0f;
 }
 
 void Defender::Draw(Graphics& gfx)
@@ -69,13 +70,13 @@ void Defender::Draw(Graphics& gfx)
     switch (model)
     {
     case Model::Interceptor:
-        img::TestAircraft((int)rect.left, (int)rect.top, gfx);
+        img::def_Interceptor(pos, gfx);
         break;
     case Model::Destroyer:
-
+        img::def_Destroyer(pos, gfx);
         break;
     case Model::Battleship:
-
+        img::def_Battleship(pos, gfx);
         break;
     }
 
@@ -107,10 +108,10 @@ void Defender::Update(Keyboard& kbd,Graphics& gfx,float dt)
     }
     pos += dir.GetNormalized() * speed*dt;
    
-    const float right = pos.x + width / 2;
-    const float left = pos.x - width / 2;
-    const float top = pos.y - height / 2;
-    const float bottom = pos.y + height / 2;
+    const float right = pos.x + width / 2.0f;
+    const float left = pos.x - width / 2.0f;
+    const float top = pos.y - height / 2.0f;
+    const float bottom = pos.y + height / 2.0f + 5.0f;
     
     if (right > float(gfx.ScreenRight))
     {
@@ -126,7 +127,7 @@ void Defender::Update(Keyboard& kbd,Graphics& gfx,float dt)
     }
     else if (bottom > float(gfx.ScreenBottom))
     {
-        pos.y = float(gfx.ScreenBottom) - height / 2.0f;
+        pos.y = float(gfx.ScreenBottom) - height / 2.0f - 5.0f;
 
     }
 
@@ -192,12 +193,22 @@ void Defender::Shoot()
         switch (model)
         {
         case Model::Interceptor:
-            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(left + 25.0f, top), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
-            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(left + 50.0f, top), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x - 6.0f, top + 6.0f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x + 6.0f, top + 6.0f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
             break;
         case Model::Destroyer:
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top - bulletRadius * 4.5f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top - bulletRadius * 3.0f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top - bulletRadius * 1.5f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top + bulletRadius * 1.5f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
             break;
         case Model::Battleship:
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x - 5.0f, top), bulletRadius), Vec2(-0.2f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x - 10.0f, top), bulletRadius), Vec2(-0.4f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x + 5.0f, top), bulletRadius), Vec2(0.2f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x + 10.0f, top), bulletRadius), Vec2(0.4f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
             break;
         }
     }

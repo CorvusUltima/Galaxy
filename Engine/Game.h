@@ -74,6 +74,9 @@ private:
 	Button btn_diff_hard;
 	Button btn_start_inactive;
 	Button btn_start_active;
+	Button btn_interceptor;
+	Button btn_destroyer;
+	Button btn_battleship;
 	Defender def;
 	
 	std::vector < std::unique_ptr < Enemy > > enemy; //Enemies

@@ -10,8 +10,12 @@ class img
 {
 public:
 	//Spaceships
-	//75x60
-	static void TestAircraft(int x, int y, Graphics& gfx);
+	//50x50
+	static void def_Interceptor(const Vec2& center, Graphics& gfx);
+	//70x80
+	static void def_Destroyer(const Vec2& center, Graphics& gfx);
+	//120x100
+	static void def_Battleship(const Vec2& center, Graphics& gfx);
 	//40x40
 	static void TestEnemy(const Vec2& center, Graphics& gfx);
 	//58x58
