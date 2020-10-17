@@ -193,12 +193,18 @@ void Game::UpdateModel(float dt)
     
         menu.Update(wnd.kbd, dt);
         barmenu.BarUpdate(wnd.kbd, dt);
+
+        if (menu.bResume && wnd.kbd.KeyIsPressed(VK_SPACE) && !menu.soundBarON)
+        {
+
+            Game::GameState = Game::GameState::Playing;
+
+            menu.bResume = false;
+        }
+
         if (menu.bSound && wnd.kbd.KeyIsPressed(VK_SPACE)) menu.soundBarON = true;
         if (menu.soundBarON && wnd.kbd.KeyIsPressed(VK_ESCAPE)) menu.soundBarON = false;
-        if (menu.bResume && wnd.kbd.KeyIsPressed(VK_SPACE))
-        {       
-         menu.bResume = false;
-        }
+       
             break;
     } 
 }
@@ -250,11 +256,17 @@ void Game::ComposeFrame()
 
     
 
+       if (!menu.bResume && !wnd.kbd.KeyIsPressed(VK_SPACE) && !menu.soundBarON)
+       {
+
+            menu.DrawMenu(gfx);
 
 
+       }
 
             break;
 
     }
+    
 }
 
