@@ -24,14 +24,18 @@ void Menu::Button::Draw(Graphics& gfx)
 		if(!IsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), sound);
 		else gfx.DrawSprite(int(rect.left), int(rect.top), soundSelect);
 		break;
+	case Type::resume:
+		if (!IsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), resume);
+		else gfx.DrawSprite(int(rect.left), int(rect.top), resumeSelect);
 	}
 }
 
 
-Menu::Menu(const Vec2& topleft, int nbuttons)
+Menu::Menu(const Vec2& topleft, int nbuttons,int nbars)
 	:
 	topleft(topleft),
-	nbuttons(nbuttons)
+	nbuttons(nbuttons),
+	nbars(nbars)
 {
 
 	for ( int i = 0; i < nbuttons; i++)
@@ -41,7 +45,7 @@ Menu::Menu(const Vec2& topleft, int nbuttons)
 		switch (i)  //Initialize button types
 		{
 		case 0:
-			buttons[i].type = Button::Type::sound;
+			buttons[i].type = Button::Type::resume;
 			break;
 		case 1:
 			buttons[i].type = Button::Type::sound;
@@ -60,6 +64,34 @@ Menu::Menu(const Vec2& topleft, int nbuttons)
 
 	selector = { buttons[0].rect.right + 5.0f, buttons[0].rect.GetCenter().y };
 
+	for (int i = 0; i < nbars; i++)
+	{
+
+		bars[i] = { Vec2(topleft.x,topleft.y + (Bar::height * i)) };
+
+		switch (i)  //Initialize exter memory precusor for atomic bomb ...nah just bar´s 
+		{
+		case 0:
+			bars[i].type = Bar::Type::sfx;
+			break;
+		case 1:
+			bars[i].type = Bar::Type::music;
+			break;
+		case 2:
+			bars[i].type = Bar::Type::music;
+			break;
+		case 3:
+			bars[i].type = Bar::Type::music;
+
+		}
+
+		BarSelector = { bars[0].rect.right + 5.0f, bars[0].rect.GetCenter().y };
+	}
+
+
+
+
+
 }
 
 
@@ -68,6 +100,14 @@ void Menu::DrawMenu(Graphics& gfx)
 	for (int i = 0; i < nbuttons; i++)
 	{
 		buttons[i].Draw(gfx);
+	}
+}
+
+void Menu::DrawBar(Graphics& gfx)
+{
+	for (int i = 0; i < nbars; i++)
+	{
+		bars[i].Draw(gfx);
 	}
 }
 
@@ -81,11 +121,35 @@ void Menu::Update(Keyboard& kbd, float dt)
 		{
 			selector.y -= Button::height;
 		}
+		else if (kbd.KeyIsPressed(VK_UP) && selector.y< buttons[0].rect.bottom && selector.y> buttons[0].rect.top)
+		{
+			
+			selector.y = buttons[nbuttons - 1].rect.GetCenter().y;
+		}
+		
+		
 		if (kbd.KeyIsPressed(VK_DOWN) && selector.y < buttons[nbuttons - 1].rect.top) //Check if selector is currently pointing abow the menu button ([nbuttons - 1] pointing to the last one)
 		{
 			selector.y += Button::height;
 		}
+		else if (kbd.KeyIsPressed(VK_DOWN) && selector.y > buttons[nbuttons - 1].rect.top && selector.y < buttons[nbuttons - 1].rect.bottom)
+		{
+			selector.y = buttons[0].rect.GetCenter().y;
+		}
+		if (kbd.KeyIsPressed(VK_SPACE) && selector.y< buttons[0].rect.bottom && selector.y> buttons[0].rect.top)
+		{
+			bResume = true;
+		}
+
+		if (kbd.KeyIsPressed(VK_SPACE) && selector.y< buttons[1].rect.bottom && selector.y> buttons[1].rect.top)
+		{
+			bSound = true;
+		}
+		
 		fSelectorMoveCooldown = 0.3f;
+
+
+
 	}
 	if(!kbd.KeyIsPressed(VK_UP) && !kbd.KeyIsPressed(VK_DOWN)) fSelectorMoveCooldown = 0; //Put selector off cooldown if commands for moving it aren't being pressed
 
@@ -96,5 +160,95 @@ void Menu::Update(Keyboard& kbd, float dt)
 	}
 }
 
+void Menu::BarUpdate(Keyboard& kbd, float dt)
+{
+	//Updating selector position
+	fSelectorMoveCooldown -= dt;
+	if (fSelectorMoveCooldown <= 0)
+	{
+		if (kbd.KeyIsPressed(VK_UP) &&BarSelector.y > bars[0].rect.bottom) //Check if selector is currently pointing below the first bar 
+		{
+			BarSelector.y -= Bar::height;
+		}
+		else if (kbd.KeyIsPressed(VK_UP) && BarSelector.y<bars[0].rect.bottom && BarSelector.y> bars[0].rect.top)
+		{
+
+			BarSelector.y = bars[nbars - 1].rect.GetCenter().y;
+		}
 
 
+		if (kbd.KeyIsPressed(VK_DOWN) && BarSelector.y < bars[nbars - 1].rect.top) //Check if selector is currently pointing abow the menu button ([nbuttons - 1] pointing to the last one)
+		{
+			BarSelector.y += Bar::height;
+		}
+		else if (kbd.KeyIsPressed(VK_DOWN) && BarSelector.y >bars[nbars - 1].rect.top && BarSelector.y < bars[nbars - 1].rect.bottom)
+		{
+			BarSelector.y = bars[0].rect.GetCenter().y;
+		}
+		if (kbd.KeyIsPressed(VK_SPACE) && BarSelector.y< bars[0].rect.bottom && BarSelector.y> bars[0].rect.top)
+		{
+			bSfx = true;
+		}
+
+		for (int i = 0; i < nbars; i++)
+		{
+			if (bars[i].BarIsSelected && kbd.KeyIsPressed(VK_LEFT) && bars[i].Volume >= 0)
+			{
+
+				bars[i].Volume -= 0.005f;
+
+			}
+			else if (bars[i].BarIsSelected && kbd.KeyIsPressed(VK_RIGHT) && bars[i].Volume < bars[i].MaxVolume)
+
+			{
+
+				bars[i].Volume += 0.005f;
+
+			}
+		}
+		
+		fSelectorMoveCooldown = 0.3f;
+
+
+
+	}
+	if (!kbd.KeyIsPressed(VK_UP) && !kbd.KeyIsPressed(VK_DOWN)) fSelectorMoveCooldown = 0; //Put selector off cooldown if commands for moving it aren't being pressed
+
+	//Check and update which button is currently selected
+	for (int i = 0; i < nbars; i++)
+	{
+		bars[i].BarIsSelected = BarSelector.y >bars[i].rect.top &&BarSelector.y < bars[i].rect.bottom;
+	}
+
+
+}
+
+Vec2 Menu::GetSelector()
+{
+	return selector;
+}
+
+Menu::Bar::Bar(Vec2& topLeft)
+{
+	rect = RectF(topLeft, width, height);
+}
+
+void Menu::Bar::Draw(Graphics& gfx)
+{
+	switch (type)
+	{
+	case Type::sfx:
+		if (!BarIsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), sfx);
+		else gfx.DrawSprite(int(rect.left), int(rect.top), sfxSelect);
+		break;
+
+	case Type::music:
+		if (!BarIsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), sfx);
+		else gfx.DrawSprite(int(rect.left), int(rect.top), sfxSelect);
+		break;
+	}
+
+	img::Status_Bar(Vec2(rect.left+50, rect.top),width,height,MaxVolume,Volume,Colors::Green,gfx);                 //(rect.left + 50, rect.top,width ,height, Colors::Green);
+	gfx.DrawRectEmpty(rect.left,rect.top,width+50,height,3, Colors::White );
+
+}

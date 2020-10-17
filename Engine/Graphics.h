@@ -53,6 +53,11 @@ public:
 	Graphics( class HWNDKey& key );
 	Graphics( const Graphics& ) = delete;
 	Graphics& operator=( const Graphics& ) = delete;
+	const RectF Getrect()const
+	{
+
+		return RectF(float(ScreenLeft), float(ScreenRight), float(ScreenTop), float(ScreenBottom));
+	}
 	void EndFrame();
 	void BeginFrame();
 	void PutPixel( int x,int y,int r,int g,int b )
@@ -79,6 +84,7 @@ public:
 	{
 		DrawLine({ (float)x0, (float)y0 }, { (float)x1, (float)y1 }, c);
 	}
+
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

@@ -25,6 +25,8 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
+    menu(Vec2(gfx.ScreenWidth/2,100),4,2),
+    barmenu(Vec2(gfx.ScreenWidth / 2-300, 150), 0, 3),
     space(fWorldSpeed, gfx),
     btn_diff_easy({ 350.0f, 445.0f, 550.0f, 585.0f }, Surface("btn_easy_unselected.bmp"), Surface("btn_easy_hovered.bmp"), Surface("btn_easy_selected.bmp")),
     btn_diff_normal({ 520.0f, 670.0f, 550.0f, 585.0f }, Surface("btn_normal_unselected.bmp"), Surface("btn_normal_hovered.bmp"), Surface("btn_normal_selected.bmp")),
@@ -179,12 +181,26 @@ void Game::UpdateModel(float dt)
             explo[i]->Update(dt);
             if (explo[i]->bExpired) explo.erase(std::remove(explo.begin(), explo.end(), explo[i]));
         }
+
+        if ( wnd.kbd.KeyIsPressed(VK_ESCAPE)) Game::GameState = Game::GameState::Paused;
+       
         break;
+
     case Game::GameState::Paused:
-        break;
-    }
-   
-   
+    
+
+
+    
+        menu.Update(wnd.kbd, dt);
+        barmenu.BarUpdate(wnd.kbd, dt);
+        if (menu.bSound && wnd.kbd.KeyIsPressed(VK_SPACE)) menu.soundBarON = true;
+        if (menu.soundBarON && wnd.kbd.KeyIsPressed(VK_ESCAPE)) menu.soundBarON = false;
+        if (menu.bResume && wnd.kbd.KeyIsPressed(VK_SPACE))
+        {       
+         menu.bResume = false;
+        }
+            break;
+    } 
 }
 
 void Game::ComposeFrame()
@@ -223,6 +239,22 @@ void Game::ComposeFrame()
         gfx.DrawCircleEmpty((int)pointer.x, (int)pointer.y, 6, Colors::Orange); //Pointer
 
         break;
+
+    case GameState::Paused:
+
+      
+
+        if (!menu.bResume&&!menu.soundBarON) menu.DrawMenu(gfx);
+      
+       if (menu.soundBarON) barmenu.DrawBar(gfx);
+
+    
+
+
+
+
+            break;
+
     }
 }
 

@@ -36,6 +36,7 @@
 #include"CircleF.h"
 #include "Button.h"
 #include <memory>
+#include"menu.h"
 
 
 class Game
@@ -65,6 +66,15 @@ private:
 		Loading,
 		Playing,
 		Paused
+
+	};
+
+	enum class MenuState
+	{
+	 Selection,
+     MenuSelection,
+	 BarSelection
+
 	};
 	/********************************/
 	GameState GameState = GameState::SelectionScreen;
@@ -78,7 +88,9 @@ private:
 	Button btn_destroyer;
 	Button btn_battleship;
 	Defender def;
-	
+	Color color;
+	Menu menu;
+	Menu barmenu;
 	std::vector < std::unique_ptr < Enemy > > enemy; //Enemies
 	std::vector < std::unique_ptr < Explosion > > explo; //Explosions (visual purposes)
 

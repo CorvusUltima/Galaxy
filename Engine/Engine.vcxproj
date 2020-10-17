@@ -257,6 +257,12 @@
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\avantura.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\Down.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\intro.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\music.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\musicSelect.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\resume.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\resumeSelect.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sfx.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sfxSelect.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sound.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\soundSelect.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\vol1.bmp" />
