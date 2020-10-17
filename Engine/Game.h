@@ -47,10 +47,15 @@ public:
 	Game& operator=( const Game& ) = delete;
 	void Go();
 private:
+	void SpawnEnemies();
 	void ComposeFrame();
 	void UpdateModel(float dt);
 	/********************************/
 	/*  User Functions              */
+	void SpawnEnemy(Enemy::Model model, int x_coordinate)
+	{
+		enemy.push_back(std::make_unique <Enemy>(model, Vec2((float)x_coordinate, 50.0f)));
+	}
 	/********************************/
 private:
 	MainWindow& wnd;
@@ -58,6 +63,7 @@ private:
 	/********************************/
 	/*  User Variables              */
     FrameTimer ft;
+	Numbers numb;
 	float fWorldSpeed = 180.0f;
 	Space space;
 	enum class GameState
@@ -100,30 +106,4 @@ private:
 	static constexpr int nWavesMax = 100;
 	bool isSpawned[nWavesMax] = { false }; //Bool for checking if the particular wave of enemies has already been spawned
 
-
-	/**************************************   L E V E L   C R E A T I O N   **************************************/
-	void SpawnWave(int wave)
-	{
-		if (wave >= 0 && wave < nWavesMax)
-		{
-			if (!isSpawned[wave])
-			{
-				switch (wave)
-				{
-				case 0:
-					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::test, Vec2(400.0f, 50.0f)));
-					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::test, Vec2(800.0f, 50.0f)));
-					break;
-				case 1:
-					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::Mine, Vec2(200.0f, 50.0f)));
-					enemy.push_back(std::make_unique <Enemy>(Enemy::Model::Mine, Vec2(1000.0f, 50.0f)));
-					break;
-				default:
-					break;
-				}
-			}
-			isSpawned[wave] = true;
-		}
-	}
-	/*************************************************************************************************************/
 }; 

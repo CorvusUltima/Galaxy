@@ -9,7 +9,7 @@ private:
 	{
 	public:
 		Star() = default;
-		Star(float fSpeed, Color c, Graphics& gfx);
+		Star(float Speed, Color c, Graphics& gfx);
 		void Draw(Graphics& gfx);
 		void Update(float dt, Graphics& gfx);
 
@@ -20,12 +20,15 @@ private:
 		float fSpeed;
 	};
 public:
-	Space(float fSpeed, Graphics& gfx);
+	Space(float WorldSpeed, Graphics& gfx);
 	void Draw(Graphics& gfx);
 	void Update(float dt, Graphics& gfx);
+	float GetDistance() const;
 
 private:
 	static constexpr int nStars = 1500;
 	Star stars[nStars];
+	float fWorldSpeed;
+	float fDistance = 0;
 };
 

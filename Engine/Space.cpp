@@ -25,13 +25,15 @@ void Space::Star::Update(float dt, Graphics& gfx)
 	}
 }
 
-Space::Space(float fSpeed, Graphics& gfx)
+Space::Space(float WorldSpeed, Graphics& gfx)
+	:
+	fWorldSpeed(WorldSpeed)
 {
 	for (int i = 0; i < nStars; i++)
 	{
-		if (i < nStars / 3) stars[i] = Star(fSpeed, Colors::MakeRGB(255, 255, 255), gfx);
-		else if (i < (nStars / 3) * 2) stars[i] = Star(fSpeed * 0.7f, Colors::MakeRGB(192, 192, 192), gfx);
-		else if (i < nStars) stars[i] = Star(fSpeed * 0.4f, Colors::MakeRGB(128, 128, 128), gfx);
+		if (i < nStars / 3) stars[i] = Star(fWorldSpeed, Colors::MakeRGB(255, 255, 255), gfx);
+		else if (i < (nStars / 3) * 2) stars[i] = Star(fWorldSpeed * 0.7f, Colors::MakeRGB(192, 192, 192), gfx);
+		else if (i < nStars) stars[i] = Star(fWorldSpeed * 0.4f, Colors::MakeRGB(128, 128, 128), gfx);
 	}
 }
 
@@ -42,5 +44,11 @@ void Space::Draw(Graphics& gfx)
 
 void Space::Update(float dt, Graphics& gfx)
 {
+	fDistance += fWorldSpeed * dt;
 	for (auto& s : stars) s.Update(dt, gfx);
+}
+
+float Space::GetDistance() const
+{
+	return fDistance;
 }

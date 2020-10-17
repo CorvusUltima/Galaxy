@@ -44,6 +44,7 @@ void Game::Go()
 {
 
 	gfx.BeginFrame();
+    SpawnEnemies();
     float ElapsedTime = ft.Mark();
     while (ElapsedTime > 0.0f)
     {
@@ -68,6 +69,23 @@ void Game::UpdateModel(float dt)
         if (wnd.kbd.KeyIsPressed(VK_UP)) dir.y -= 1.0f;
         if (wnd.kbd.KeyIsPressed(VK_DOWN)) dir.y += 1.0f;
         pointer += dir.GetNormalized() * 500.0f * dt;
+        if (pointer.x > float(gfx.ScreenRight) - 6.0f)
+        {
+            pointer.x = float(gfx.ScreenRight) - 6.0f;
+        }
+        else if (pointer.x <= float(gfx.ScreenLeft) + 6.0f)
+        {
+            pointer.x = float(gfx.ScreenLeft) + 6.0f;
+        }
+        if (pointer.y <= float(gfx.ScreenTop) + 6.0f)
+        {
+            pointer.y = float(gfx.ScreenTop) + 6.0f;
+        }
+        else if (pointer.y > float(gfx.ScreenBottom) - 6.0f)
+        {
+            pointer.y = float(gfx.ScreenBottom) - 6.0f;
+
+        }
 
         //Defender selection
         btn_interceptor.Update(wnd.kbd, pointer);
@@ -134,10 +152,8 @@ void Game::UpdateModel(float dt)
     case Game::GameState::Playing:
 
         fElapsedTime += dt; //Measures time passed from the start of the game
-        nWave = -1 + (int)(fElapsedTime / 3.0f); //Increases the wave by 1 every 3 seconds (temporary)
-        SpawnWave(nWave);  //Spawn the current wave of enemies
 
-        while(enemy.size() < 2) enemy.push_back(std::make_unique <Enemy>(Enemy::Model::test, Vec2(rng::rdm_float(330.0f, 830.0f), 50.0f))); //Infinite enemies just for testing
+        //while(enemy.size() < 2) enemy.push_back(std::make_unique <Enemy>(Enemy::Model::test, Vec2(rng::rdm_float(330.0f, 830.0f), 50.0f))); //Infinite enemies just for testing
 
         space.Update(dt, gfx);
         def.Update(wnd.kbd, gfx, dt);
@@ -209,6 +225,7 @@ void Game::UpdateModel(float dt)
     } 
 }
 
+
 void Game::ComposeFrame()
 { 
     switch (GameState)
@@ -216,6 +233,7 @@ void Game::ComposeFrame()
     case GameState::Playing:
 
         space.Draw(gfx); //Background
+        numb.Draw(gfx.ScreenLeft + 20, gfx.ScreenBottom - 40, (int)space.GetDistance(), Colors::White, gfx);
         def.Draw(gfx); //Defender
         for (int i = 0; i < def.bullets.size(); i++) def.bullets[i]->Draw(gfx); //Defender bullets
 
@@ -270,3 +288,48 @@ void Game::ComposeFrame()
     
 }
 
+void Game::SpawnEnemies()
+{
+    const int distance = (int)space.GetDistance();
+    if (nWave < nWavesMax)
+    {
+        if (isSpawned[nWave]) nWave++;
+
+        switch (nWave)
+        {
+        case 0:
+            if (distance >= 300)
+            {
+                SpawnEnemy(Enemy::Model::test, 400);
+                SpawnEnemy(Enemy::Model::test, 800);
+
+                isSpawned[nWave] = true;
+            }
+            break;
+        case 1:
+            if (distance >= 600)
+            {
+                SpawnEnemy(Enemy::Model::Mine, 200);
+                SpawnEnemy(Enemy::Model::Mine, 400);
+                SpawnEnemy(Enemy::Model::Mine, 600);
+                SpawnEnemy(Enemy::Model::Mine, 800);
+                SpawnEnemy(Enemy::Model::Mine, 1000);
+
+                isSpawned[nWave] = true;
+            }
+            break;
+        case 2:
+            if (distance >= 1200)
+            {
+                SpawnEnemy(Enemy::Model::test, 300);
+                SpawnEnemy(Enemy::Model::test, 600);
+                SpawnEnemy(Enemy::Model::test, 900);
+
+                isSpawned[nWave] = true;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+}
