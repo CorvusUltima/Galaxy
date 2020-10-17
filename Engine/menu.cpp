@@ -190,21 +190,34 @@ void Menu::BarUpdate(Keyboard& kbd, float dt)
 			bSfx = true;
 		}
 
-		for (int i = 0; i < nbars; i++)
+		
+		
+		if (bars[0].BarIsSelected && kbd.KeyIsPressed(VK_LEFT) && bars[0].SfxVolume >= 0)
 		{
-			if (bars[i].BarIsSelected && kbd.KeyIsPressed(VK_LEFT) && bars[i].Volume >= 0)
-			{
 
-				bars[i].Volume -= 0.005f;
+			bars[0].SfxVolume -= 0.005f;
 
-			}
-			else if (bars[i].BarIsSelected && kbd.KeyIsPressed(VK_RIGHT) && bars[i].Volume < bars[i].MaxVolume)
+		}
+		else if (bars[0].BarIsSelected && kbd.KeyIsPressed(VK_RIGHT) && bars[0].SfxVolume < bars[0].MaxSfxVolume)
 
-			{
+		{
 
-				bars[i].Volume += 0.005f;
+			bars[0].SfxVolume += 0.005f;
 
-			}
+		}
+		
+		if (bars[1].BarIsSelected && kbd.KeyIsPressed(VK_LEFT) && bars[1].MusicVolume >= 0)
+		{
+
+			bars[1].MusicVolume -= 0.005f;
+
+		}
+		else if (bars[1].BarIsSelected && kbd.KeyIsPressed(VK_RIGHT) && bars[1].MusicVolume< bars[1].MaxMusicVolume)
+
+		{
+
+			bars[1].MusicVolume += 0.005f;
+
 		}
 		
 		fSelectorMoveCooldown = 0.3f;
@@ -240,15 +253,17 @@ void Menu::Bar::Draw(Graphics& gfx)
 	case Type::sfx:
 		if (!BarIsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), sfx);
 		else gfx.DrawSprite(int(rect.left), int(rect.top), sfxSelect);
+		img::Status_Bar(Vec2(rect.left + 50, rect.top), width, height, MaxSfxVolume, SfxVolume, Colors::Green, gfx);
 		break;
 
 	case Type::music:
-		if (!BarIsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), sfx);
-		else gfx.DrawSprite(int(rect.left), int(rect.top), sfxSelect);
+		if (!BarIsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), music);
+		else gfx.DrawSprite(int(rect.left), int(rect.top), musicSelect);
+		img::Status_Bar(Vec2(rect.left + 50, rect.top), width, height, MaxMusicVolume,MusicVolume, Colors::Green, gfx);
 		break;
 	}
 
-	img::Status_Bar(Vec2(rect.left+50, rect.top),width,height,MaxVolume,Volume,Colors::Green,gfx);                 //(rect.left + 50, rect.top,width ,height, Colors::Green);
+	                 //(rect.left + 50, rect.top,width ,height, Colors::Green);
 	gfx.DrawRectEmpty(rect.left,rect.top,width+50,height,3, Colors::White );
 
 }

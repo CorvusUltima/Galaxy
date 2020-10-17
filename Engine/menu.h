@@ -37,11 +37,14 @@ private:
 		static constexpr float width = 200.0f;
 		static constexpr float height = 30.0f;
 		static constexpr float separator = 10.0f;
-		static constexpr float  MaxVolume = 1.0f;
-		float  Volume = MaxVolume;
+		static constexpr float  MaxSfxVolume = 1.0f;
+		float SfxVolume = MaxSfxVolume;
+		static constexpr float  MaxMusicVolume = 1.0f;
+		float  MusicVolume = MaxMusicVolume;
 		Surface sfx = Surface("sfx.bmp");
 		Surface sfxSelect = Surface("sfxSelect.bmp");
-
+		Surface music = Surface("music.bmp");
+		Surface musicSelect = Surface("musicSelect.bmp");
 	};
 
 
