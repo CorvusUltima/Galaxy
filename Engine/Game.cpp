@@ -35,7 +35,11 @@ Game::Game( MainWindow& wnd )
     btn_start_active({ 530.0f, 650.0f, 700.0f, 735.0f }, Surface("btn_StartActive_unselected.bmp"), Surface("btn_StartActive_hovered.bmp"), Surface("btn_StartActive_hovered.bmp")),
     btn_interceptor({ 260.0f, 390.0f, 180.0f, 290.0f }, Surface("btn_Interceptor_unselected.bmp"), Surface("btn_Interceptor_hovered.bmp"), Surface("btn_Interceptor_selected.bmp")),
     btn_destroyer({ 530.0f, 660.0f, 180.0f, 290.0f }, Surface("btn_Destroyer_unselected.bmp"), Surface("btn_Destroyer_hovered.bmp"), Surface("btn_Destroyer_selected.bmp")),
-    btn_battleship({ 800.0f, 930.0f, 180.0f, 290.0f }, Surface("btn_Battleship_unselected.bmp"), Surface("btn_Battleship_hovered.bmp"), Surface("btn_Battleship_selected.bmp"))
+    btn_battleship({ 800.0f, 930.0f, 180.0f, 290.0f }, Surface("btn_Battleship_unselected.bmp"), Surface("btn_Battleship_hovered.bmp"), Surface("btn_Battleship_selected.bmp")),
+    Laser(L"laserGun.wav"),
+    ExplosionLarge(L"ExplosionLarge.wav"),
+    ExplosionScif(L"ExplosionSciF.wav")
+
     
 {
 }
@@ -160,6 +164,7 @@ void Game::UpdateModel(float dt)
         for (int i = 0; i < def.bullets.size(); i++) //Update defender bullets
         {
             def.bullets[i]->Update(dt);
+            Laser.Play();
             def.bullets[i]->delete_offscreen(gfx); //Mark bullets that are off screen to be deleted
             for (int j = 0; j < enemy.size(); j++)
             if (def.bullets[i]->isTargetHit(CircleF(enemy[j]->GetColCircle()))) //Check collision against all enemies
@@ -188,6 +193,7 @@ void Game::UpdateModel(float dt)
             if (enemy[i]->bDead) //Check if any enemy is dead
             {
                 explo.push_back(std::make_unique<Explosion>(enemy[i]->GetPos(), Explosion::Size::Medium)); //Create explosion where enemy died
+               ExplosionLarge.Play();
                 enemy[i]->mark_remove(gfx); //Mark enemies that need to be deleted
                 if(enemy[i]->BulletCount() == 0) enemy.erase(std::remove(enemy.begin(), enemy.end(), enemy[i])); //Delete dead enemies when all their bullets are deleted
             }
@@ -202,11 +208,7 @@ void Game::UpdateModel(float dt)
        
         break;
 
-    case Game::GameState::Paused:
-    
-
-
-    
+    case Game::GameState::Paused:   
         menu.Update(wnd.kbd, dt);
         barmenu.BarUpdate(wnd.kbd, dt);
 

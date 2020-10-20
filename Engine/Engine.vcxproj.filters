@@ -341,5 +341,22 @@
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\music.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\backSelect.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\back.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionSciF.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\LaserGun.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionLarge.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

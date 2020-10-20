@@ -37,6 +37,7 @@
 #include "Button.h"
 #include <memory>
 #include"menu.h"
+#include"sound.h"
 
 
 class Game
@@ -99,7 +100,9 @@ private:
 	Menu barmenu;
 	std::vector < std::unique_ptr < Enemy > > enemy; //Enemies
 	std::vector < std::unique_ptr < Explosion > > explo; //Explosions (visual purposes)
-
+	Sound Laser;
+	Sound ExplosionLarge;
+	Sound ExplosionScif;
 	float fElapsedTime = 0;
 
 	int nWave = -1; //Current wave of enemies

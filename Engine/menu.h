@@ -45,6 +45,8 @@ private:
 		Surface sfxSelect = Surface("sfxSelect.bmp");
 		Surface music = Surface("music.bmp");
 		Surface musicSelect = Surface("musicSelect.bmp");
+		Surface back = Surface("back.bmp");
+		Surface backSelect = Surface("backSelect.bmp");
 	};
 
 

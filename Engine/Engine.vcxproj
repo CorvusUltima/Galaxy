@@ -255,6 +255,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\avantura.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\back.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\backSelect.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\Down.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\intro.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\music.bmp" />
@@ -306,6 +308,11 @@
     <Image Include="btn_StartActive_unselected.bmp" />
     <Image Include="btn_StartInactive.bmp" />
     <Image Include="Chili.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionLarge.wav" />
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionSciF.wav" />
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\LaserGun.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

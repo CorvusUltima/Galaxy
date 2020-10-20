@@ -27,6 +27,7 @@ void Menu::Button::Draw(Graphics& gfx)
 	case Type::resume:
 		if (!IsSelected) gfx.DrawSprite(int(rect.left), int(rect.top), resume);
 		else gfx.DrawSprite(int(rect.left), int(rect.top), resumeSelect);
+
 	}
 }
 
@@ -78,10 +79,9 @@ Menu::Menu(const Vec2& topleft, int nbuttons,int nbars)
 			bars[i].type = Bar::Type::music;
 			break;
 		case 2:
-			bars[i].type = Bar::Type::music;
+			bars[i].type = Bar::Type::back;
 			break;
-		case 3:
-			bars[i].type = Bar::Type::music;
+
 
 		}
 
@@ -261,9 +261,16 @@ void Menu::Bar::Draw(Graphics& gfx)
 		else gfx.DrawSprite(int(rect.left), int(rect.top), musicSelect);
 		img::Status_Bar(Vec2(rect.left + 50, rect.top), width, height, MaxMusicVolume,MusicVolume, Colors::Green, gfx);
 		break;
+	case Type::back:
+		if (!BarIsSelected) gfx.DrawSprite(int(rect.left + 75), int(rect.top), back);
+		else  gfx.DrawSprite(int(rect.left + 75), int(rect.top), backSelect);
+
+		break;
 	}
 
-	                 //(rect.left + 50, rect.top,width ,height, Colors::Green);
+	if (Bar::type==Bar::Type::back)gfx.DrawRectEmpty(rect.left+75, rect.top, 100, height, 3, Colors::White);
+
+	else
 	gfx.DrawRectEmpty(rect.left,rect.top,width+50,height,3, Colors::White );
 
 }
