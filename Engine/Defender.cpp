@@ -147,6 +147,11 @@ void Defender::TakeDmg(float dmg)
     }
 }
 
+void Defender::AddScore(float score)
+{
+    fScore += score;
+}
+
 Vec2 Defender::GetPos() const
 {
     return pos;
@@ -160,6 +165,11 @@ CircleF Defender::GetColCircle() const
 float Defender::GetDmg() const
 {
     return dmg;
+}
+
+float Defender::GetScore() const
+{
+    return fScore;
 }
 
 

@@ -27,9 +27,11 @@ public:
 	void Draw(Graphics& gfx);
 	void Update(Keyboard& kbd,Graphics&gfx,float dt);
 	void TakeDmg(float dmg);
+	void AddScore(float score);
 	Vec2 GetPos() const;
 	CircleF GetColCircle() const;
 	float GetDmg() const;
+	float GetScore() const;
 	bool bDead = false;
 
 	std::vector<std::unique_ptr <Bullet> > bullets;	
@@ -39,6 +41,7 @@ private:
 	void SetDifficulty(const Difficulty diff);
 	Difficulty difficulty = Difficulty::Normal;
 	float diff_multiplier = 1.0f;
+	float fScore = 0;
 
 	void Shoot();
 

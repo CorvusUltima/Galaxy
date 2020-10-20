@@ -35,6 +35,7 @@ public:
 	void TakeDmg(float dmg);
 	Vec2 GetPos() const;
 	float GetDmg() const;
+	float GetHealth() const;
 	bool hasCrashedInto(const CircleF& circle);
 	bool hasCrashedInto(const Vec2& coordinate);
 	CircleF GetColCircle() const;
@@ -42,6 +43,7 @@ public:
 
 	float collision_dmg = 0;
 	bool bDead = false;
+	float fScore = 0;
 
 	std::vector < std::unique_ptr<Bullet>> bullets;
 	const int BulletCount() const; //Used to determine if enemy should beremoved from game

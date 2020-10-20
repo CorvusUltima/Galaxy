@@ -287,9 +287,12 @@
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\vol666.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\svemir2.bmp" />
     <Image Include="btn_Battleship_hovered.bmp" />
+    <Image Include="btn_Battleship_name.bmp" />
     <Image Include="btn_Battleship_selected.bmp" />
     <Image Include="btn_Battleship_unselected.bmp" />
+    <Image Include="btn_Defender_stats.bmp" />
     <Image Include="btn_Destroyer_hovered.bmp" />
+    <Image Include="btn_Destroyer_name.bmp" />
     <Image Include="btn_Destroyer_selected.bmp" />
     <Image Include="btn_Destroyer_unselected.bmp" />
     <Image Include="btn_easy_hovered.bmp" />
@@ -299,6 +302,7 @@
     <Image Include="btn_hard_selected.bmp" />
     <Image Include="btn_hard_unselected.bmp" />
     <Image Include="btn_Interceptor_hovered.bmp" />
+    <Image Include="btn_Interceptor_name.bmp" />
     <Image Include="btn_Interceptor_selected.bmp" />
     <Image Include="btn_Interceptor_unselected.bmp" />
     <Image Include="btn_normal_hovered.bmp" />

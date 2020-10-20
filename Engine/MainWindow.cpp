@@ -46,7 +46,7 @@ MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs )
 	wr.top = 50;
 	wr.bottom = 750 + wr.top;
 	AdjustWindowRect( &wr,WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU,FALSE );
-	hWnd = CreateWindow( wndClassName,L"Chili DirectX Framework",
+	hWnd = CreateWindow( wndClassName,L"Galaxy",
 		WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU,
 		wr.left,wr.top,wr.right - wr.left,wr.bottom - wr.top,
 		nullptr,nullptr,hInst,this );

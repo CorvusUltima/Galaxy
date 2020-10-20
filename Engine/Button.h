@@ -15,11 +15,17 @@ public:
 		selected(selected)
 	{
 	}
-	void Update(const Keyboard& kbd, const Vec2& pointer)
+	void Update(const Keyboard& kbd, const Vec2& pointer, float dt)
 	{
 		bHoveredOver = button.isContaining(pointer);
 
-		if (bHoveredOver && kbd.KeyIsPressed(VK_RETURN)) bSelected = true;
+		if (bHoveredOver && (kbd.KeyIsPressed(VK_RETURN) || kbd.KeyIsPressed(VK_SPACE))) bSelected = true;
+
+		if (bSelected) fBarTimer = fBarTimerMax;
+		else if (bHoveredOver) fBarTimer += dt;
+		else fBarTimer = 0;
+		if (fBarTimer < fBarTimerMax) fBarPercentage = fBarTimer / fBarTimerMax;
+		else fBarPercentage = 1.0f;
 	}
 	void Draw(Graphics& gfx)
 	{
@@ -36,5 +42,10 @@ public:
 	Surface unselected;
 	Surface hoveredOver;
 	Surface selected;
+
+	//Variables for drawing stats bar
+	float fBarTimer = 0;
+	static constexpr float fBarTimerMax = 1.2f;
+	float fBarPercentage = 0;
 };
 

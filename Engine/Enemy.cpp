@@ -20,6 +20,7 @@ Enemy::Enemy(const Model model, const Vec2& pos, const MovePattern MovePattern, 
 		reloadTime_max = 1.2f;
 		if(MovePattern == MovePattern::ModelDefault) movePattern = MovePattern::Sinusoid_Down;
 		if(FirePattern == FirePattern::ModelDefault) firePattern = FirePattern::SingleBullet_Down;
+		fScore = 10.0f;
 		break;
 	case Model::Mine:
 		width = 58.0f;
@@ -29,6 +30,7 @@ Enemy::Enemy(const Model model, const Vec2& pos, const MovePattern MovePattern, 
 		collision_dmg = 250.0f;
 		if (MovePattern == MovePattern::ModelDefault) movePattern = MovePattern::StraightDown;
 		if (FirePattern == FirePattern::ModelDefault) firePattern = FirePattern::None;
+		fScore = 18.0f;
 		break;
 	}
 	health_current = health_max;
@@ -82,6 +84,11 @@ Vec2 Enemy::GetPos() const
 float Enemy::GetDmg() const
 {
 	return dmg;
+}
+
+float Enemy::GetHealth() const
+{
+	return health_current;
 }
 
 bool Enemy::hasCrashedInto(const CircleF& circle)

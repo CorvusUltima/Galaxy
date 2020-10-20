@@ -44,7 +44,7 @@ void Space::Draw(Graphics& gfx)
 
 void Space::Update(float dt, Graphics& gfx)
 {
-	fDistance += fWorldSpeed * dt;
+	fDistance += (fWorldSpeed * dt) / 10.0f;
 	for (auto& s : stars) s.Update(dt, gfx);
 }
 
