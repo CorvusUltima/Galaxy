@@ -314,6 +314,7 @@
     <Image Include="Chili.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\click.wav" />
     <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionLarge.wav" />
     <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionSciF.wav" />
     <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\LaserGun.wav" />

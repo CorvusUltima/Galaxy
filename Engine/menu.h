@@ -7,6 +7,7 @@
 #include"Mouse.h"
 #include"Keyboard.h"
 #include"img.h"
+#include"sound.h"
 class Menu
 {
 public:
@@ -47,6 +48,7 @@ private:
 		Surface musicSelect = Surface("musicSelect.bmp");
 		Surface back = Surface("back.bmp");
 		Surface backSelect = Surface("backSelect.bmp");
+		
 	};
 
 
@@ -91,12 +93,14 @@ public:
 	void DrawBar(Graphics& gfx);
 	void Update(Keyboard& kbd, float dt);
 	void BarUpdate(Keyboard& kbd, float dt);
+	float SfxVolume();
 	Vec2 GetSelector();
 	bool bResume = false;
 	bool bSound = false;
+	bool bBack = false;
 	bool soundBarON = false;
 	bool bSfx = false;
-
+	Sound  click = (L"click.wav");
 private:
 
 

@@ -145,6 +145,8 @@ void Menu::Update(Keyboard& kbd, float dt)
 		{
 			bSound = true;
 		}
+
+
 		
 		fSelectorMoveCooldown = 0.3f;
 
@@ -162,10 +164,17 @@ void Menu::Update(Keyboard& kbd, float dt)
 
 void Menu::BarUpdate(Keyboard& kbd, float dt)
 {
+
+
+
 	//Updating selector position
 	fSelectorMoveCooldown -= dt;
 	if (fSelectorMoveCooldown <= 0)
 	{
+
+ 		if (kbd.KeyIsPressed(VK_UP) || kbd.KeyIsPressed(VK_DOWN))click.Play(bars[0].MaxSfxVolume, bars[0].SfxVolume);// just adding sound of clikcing while in menu 
+		
+
 		if (kbd.KeyIsPressed(VK_UP) &&BarSelector.y > bars[0].rect.bottom) //Check if selector is currently pointing below the first bar 
 		{
 			BarSelector.y -= Bar::height;
@@ -175,7 +184,10 @@ void Menu::BarUpdate(Keyboard& kbd, float dt)
 
 			BarSelector.y = bars[nbars - 1].rect.GetCenter().y;
 		}
-
+		if (kbd.KeyIsPressed(VK_SPACE) && BarSelector.y< bars[2].rect.bottom && BarSelector.y> bars[2].rect.top)
+		{
+			bBack = true;
+		}
 
 		if (kbd.KeyIsPressed(VK_DOWN) && BarSelector.y < bars[nbars - 1].rect.top) //Check if selector is currently pointing abow the menu button ([nbuttons - 1] pointing to the last one)
 		{
@@ -219,10 +231,11 @@ void Menu::BarUpdate(Keyboard& kbd, float dt)
 			bars[1].MusicVolume += 0.005f;
 
 		}
+
 		
 		fSelectorMoveCooldown = 0.3f;
 
-
+		
 
 	}
 	if (!kbd.KeyIsPressed(VK_UP) && !kbd.KeyIsPressed(VK_DOWN)) fSelectorMoveCooldown = 0; //Put selector off cooldown if commands for moving it aren't being pressed
@@ -233,7 +246,14 @@ void Menu::BarUpdate(Keyboard& kbd, float dt)
 		bars[i].BarIsSelected = BarSelector.y >bars[i].rect.top &&BarSelector.y < bars[i].rect.bottom;
 	}
 
+	
 
+
+}
+
+float Menu::SfxVolume()
+{
+	return bars[0].SfxVolume;
 }
 
 Vec2 Menu::GetSelector()
@@ -268,9 +288,9 @@ void Menu::Bar::Draw(Graphics& gfx)
 		break;
 	}
 
-	if (Bar::type==Bar::Type::back)gfx.DrawRectEmpty(rect.left+75, rect.top, 100, height, 3, Colors::White);
+	if (Bar::type==Bar::Type::back)gfx.DrawRectEmpty((int)rect.left+ (int)75, (int)rect.top, (int)100, (int)height, (int)3, Colors::White);
 
 	else
-	gfx.DrawRectEmpty(rect.left,rect.top,width+50,height,3, Colors::White );
+	gfx.DrawRectEmpty((int)rect.left, (int)rect.top, (int)width+50, (int)height,3, Colors::White );
 
 }

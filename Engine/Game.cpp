@@ -164,7 +164,7 @@ void Game::UpdateModel(float dt)
         for (int i = 0; i < def.bullets.size(); i++) //Update defender bullets
         {
             def.bullets[i]->Update(dt);
-            Laser.Play();
+            Laser.Play(1.0f, barmenu.SfxVolume());
             def.bullets[i]->delete_offscreen(gfx); //Mark bullets that are off screen to be deleted
             for (int j = 0; j < enemy.size(); j++)
             if (def.bullets[i]->isTargetHit(CircleF(enemy[j]->GetColCircle()))) //Check collision against all enemies
@@ -198,7 +198,7 @@ void Game::UpdateModel(float dt)
             if (enemy[i]->bDead) //Check if any enemy is dead
             {
                 explo.push_back(std::make_unique<Explosion>(enemy[i]->GetPos(), Explosion::Size::Medium)); //Create explosion where enemy died
-               ExplosionLarge.Play();
+               ExplosionLarge.Play(1.0f,barmenu.SfxVolume());
                 enemy[i]->mark_remove(gfx); //Mark enemies that need to be deleted
                 if(enemy[i]->BulletCount() == 0) enemy.erase(std::remove(enemy.begin(), enemy.end(), enemy[i])); //Delete dead enemies when all their bullets are deleted
             }
@@ -227,7 +227,8 @@ void Game::UpdateModel(float dt)
 
         if (menu.bSound && wnd.kbd.KeyIsPressed(VK_SPACE)) menu.soundBarON = true;
         if (menu.soundBarON && wnd.kbd.KeyIsPressed(VK_ESCAPE)) menu.soundBarON = false;
-       
+        if (barmenu.bBack)menu.soundBarON = false;
+        barmenu.bBack = false;
             break;
     } 
 }
@@ -257,6 +258,7 @@ void Game::ComposeFrame()
         break;
 
     case GameState::SelectionScreen:
+    {
 
         btn_interceptor.Draw(gfx);
         btn_destroyer.Draw(gfx);
@@ -301,7 +303,7 @@ void Game::ComposeFrame()
         }
 
         gfx.DrawCircleEmpty((int)pointer.x, (int)pointer.y, 6, Colors::Orange); //Pointer
-
+    }
         break;
 
     case GameState::Paused:

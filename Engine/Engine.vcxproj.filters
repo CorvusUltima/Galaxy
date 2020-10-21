@@ -102,6 +102,9 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -162,6 +165,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CircleF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -320,5 +326,52 @@
     <Image Include="btn_Defender_stats.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\back.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\backSelect.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\Down.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\music.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\musicSelect.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\resume.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\resumeSelect.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sfx.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sfxSelect.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\sound.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\soundSelect.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionLarge.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\ExplosionSciF.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\LaserGun.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\OneDrive\Desktop\wav zvukovi\click.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>
