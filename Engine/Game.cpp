@@ -28,6 +28,7 @@ Game::Game( MainWindow& wnd )
     menu(Vec2(gfx.ScreenWidth/2,100),4,2),
     barmenu(Vec2(gfx.ScreenWidth / 2-300, 150), 0, 3),
     space(fWorldSpeed, gfx),
+    boss(Boss::Model::lvl1,Vec2(200.0f,200.0f)),
     btn_diff_easy({ 350.0f, 445.0f, 550.0f, 585.0f }, Surface("btn_easy_unselected.bmp"), Surface("btn_easy_hovered.bmp"), Surface("btn_easy_selected.bmp")),
     btn_diff_normal({ 520.0f, 670.0f, 550.0f, 585.0f }, Surface("btn_normal_unselected.bmp"), Surface("btn_normal_hovered.bmp"), Surface("btn_normal_selected.bmp")),
     btn_diff_hard({ 745.0f, 845.0f, 550.0f, 585.0f }, Surface("btn_hard_unselected.bmp"), Surface("btn_hard_hovered.bmp"), Surface("btn_hard_selected.bmp")),
@@ -161,6 +162,7 @@ void Game::UpdateModel(float dt)
 
         space.Update(dt, gfx);
         def.Update(wnd.kbd, gfx, dt);
+        boss.Update(dt, gfx);
         for (int i = 0; i < def.bullets.size(); i++) //Update defender bullets
         {
             def.bullets[i]->Update(dt);
@@ -254,6 +256,7 @@ void Game::ComposeFrame()
         for (int i = 0; i < explo.size(); i++) explo[i]->Draw(gfx); //Explosions
 
         numb.Draw(gfx.ScreenRight - 80, gfx.ScreenTop + 10, (int)def.GetScore(), Colors::White, gfx); //Score
+        boss.Draw(gfx);
 
         break;
 

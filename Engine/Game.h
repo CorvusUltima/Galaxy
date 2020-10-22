@@ -38,6 +38,7 @@
 #include <memory>
 #include"menu.h"
 #include"sound.h"
+#include "Boss.h"
 
 
 class Game
@@ -98,6 +99,7 @@ private:
 	Color color;
 	Menu menu;
 	Menu barmenu;
+	Boss boss;
 	std::vector < std::unique_ptr < Enemy > > enemy; //Enemies
 	std::vector < std::unique_ptr < Explosion > > explo; //Explosions (visual purposes)
 	Sound Laser;
