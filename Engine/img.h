@@ -20,6 +20,8 @@ public:
 	static void TestEnemy(const Vec2& center, Graphics& gfx);
 	//58x58
 	static void Enemy_Mine(const Vec2& center, Graphics& gfx);
+	//150x120
+	static void Boss_test(const Vec2& center, Graphics& gfx);
 
 	//HP bar
 	static void HP_Bar(const Vec2& topleft, float maxWidth, float height, float maxHealth, float currentHealth, Graphics& gfx, bool DivideSegments = false, float segmentHealth = 100.0f);
