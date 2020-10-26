@@ -29,7 +29,7 @@ public:
 		ModelDefault
 	};
 	Enemy(const Model model, const Vec2& pos,
-		const MovePattern MovePattern = MovePattern::ModelDefault, const FirePattern FirePattern = FirePattern::ModelDefault);
+	const MovePattern MovePattern = MovePattern::ModelDefault, const FirePattern FirePattern = FirePattern::ModelDefault);
 	void Draw(Graphics& gfx);
 	void Update(float dt, Graphics& gfx);
 	void TakeDmg(float dmg);
@@ -46,7 +46,7 @@ public:
 	float fScore = 0;
 
 	std::vector < std::unique_ptr<Bullet>> bullets;
-	const int BulletCount() const; //Used to determine if enemy should beremoved from game
+	const int BulletCount() const; //Used to determine if enemy should be removed from game
 
 private:
 	void Move(float dt);

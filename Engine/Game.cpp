@@ -163,6 +163,17 @@ void Game::UpdateModel(float dt)
         space.Update(dt, gfx);
         def.Update(wnd.kbd, gfx, dt);
         boss.Update(dt, gfx);
+        
+        
+        for (int i = 0; i < boss.bullets.size(); i++)// update boss bullts 
+        {
+           boss.bullets[i]->Update(dt);
+           boss.bullets[i]->delete_offscreen(gfx); //Mark bullets that are off screen to be deleted
+
+        }
+        
+
+           
         for (int i = 0; i < def.bullets.size(); i++) //Update defender bullets
         {
             def.bullets[i]->Update(dt);
@@ -244,7 +255,8 @@ void Game::ComposeFrame()
 
         space.Draw(gfx); //Background
         numb.Draw(gfx.ScreenLeft + 20, gfx.ScreenBottom - 40, (int)space.GetDistance(), Colors::White, gfx); //Distance
-        def.Draw(gfx); //Defender
+        def.Draw(gfx);//Defender
+        boss.Draw(gfx);
         for (int i = 0; i < def.bullets.size(); i++) def.bullets[i]->Draw(gfx); //Defender bullets
 
         for (int i = 0; i < enemy.size(); i++) //Enemies
@@ -255,8 +267,14 @@ void Game::ComposeFrame()
 
         for (int i = 0; i < explo.size(); i++) explo[i]->Draw(gfx); //Explosions
 
+        
         numb.Draw(gfx.ScreenRight - 80, gfx.ScreenTop + 10, (int)def.GetScore(), Colors::White, gfx); //Score
-        boss.Draw(gfx);
+        
+
+        for (int i = 0; i < boss.bullets.size(); i++)
+        {
+            boss.bullets[i]->Draw(gfx);
+        }
 
         break;
 
