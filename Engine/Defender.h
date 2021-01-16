@@ -6,6 +6,7 @@
 #include"Keyboard.h"
 #include "Bullet.h"
 #include <memory>
+#include"Sound.h"
 
 class Defender
 {
@@ -42,7 +43,7 @@ private:
 	Difficulty difficulty = Difficulty::Normal;
 	float diff_multiplier = 1.0f;
 	float fScore = 0;
-
+	Sound Laser;
 	void Shoot();
 
 	Model model = Model::Interceptor;

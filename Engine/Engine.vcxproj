@@ -164,6 +164,7 @@
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +189,7 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +263,7 @@
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\backSelect.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\Down.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\intro.bmp" />
+    <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\leftpointer.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\music.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\musicSelect.bmp" />
     <Image Include="..\..\..\..\OneDrive\Desktop\Eksplozije\resume.bmp" />

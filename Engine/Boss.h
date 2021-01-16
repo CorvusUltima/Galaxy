@@ -25,9 +25,12 @@ public:
 	
     void Draw(Graphics& gfx);
 	void Update(float dt, Graphics& gfx);
+	float GetDmg();
 	Vec2 GetPos();
 	std::vector<std::unique_ptr<Bullet>> bullets;
-
+	CircleF GetColCircle() const;
+	void TakeDmg(float dmg);
+	bool bDead();
 
 private:
 
@@ -39,11 +42,14 @@ private:
 	float width;
 	float height;
 	float speed;
-	float HealthMax = 100;
+	float colRadius ;
+	float dmg = 35.0f;
+	float HealthMax =2500;
 	float HealthCurent = HealthMax;
 	float reloadTime_max =0.5f;
 	float BulletAng =6.0f;
 	float reloadTime_current = reloadTime_max;
+	bool Dead = false;
 	bool GoDown=false;//bool for Movement  of Boss in update 
 	bool GoUp=true;//bool for Movement  of Boss in update 
 	bool GoRight = true;//bool for Movement  of Boss in update 

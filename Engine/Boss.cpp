@@ -13,9 +13,9 @@ Boss::Boss(const Model model, const Vec2& pos)
 		width = 150.0f;
 		height = 120.0f;
 		speed = 60.0f;
+		colRadius = width / 2;
 
 	 break;
-
 	}
 }
 
@@ -68,10 +68,31 @@ void Boss::Update(float dt, Graphics& gfx)
 	 reloadTime_current -= dt;
 }
 
+float Boss::GetDmg()
+{
+	return dmg;
+}
+
 Vec2 Boss::GetPos()
 {
 	return  pos;
 }
+
+CircleF Boss::GetColCircle() const
+{
+	return CircleF(pos, colRadius);
+}
+
+void Boss::TakeDmg(float dmg)
+{
+	HealthCurent -= dmg;
+}
+
+bool Boss::bDead()
+{
+	return Dead;
+}
+
 
 void Boss::Shot()
 {
@@ -82,7 +103,7 @@ void Boss::Shot()
 	{
 
 		reloadTime_current = reloadTime_max;
-		bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, bottom), 6.0f), Vec2(BulletAng, 1.0f), Colors::Red, 150.0f, 5.0f));
+		bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, bottom), 6.0f), Vec2(BulletAng, 1.0f), Colors::Red, 150.0f, dmg));
 		
 		
 		if (BulletAng >= 8.0f || BulletAng >= -8.0f)

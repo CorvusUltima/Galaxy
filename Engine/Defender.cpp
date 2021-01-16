@@ -3,7 +3,8 @@
 Defender::Defender(const Vec2& pos, const Model model, const Difficulty diff)
 	:
 	pos(pos),
-	model(model)
+	model(model),
+    Laser(L"laserGun.wav")
 	
 {
     SetDifficulty(diff);
@@ -212,6 +213,7 @@ void Defender::Shoot()
             bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top - bulletRadius * 1.5f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
             bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
             bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top + bulletRadius * 1.5f), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));
+            Laser.Play();
             break;
         case Model::Battleship:
             bullets.push_back(std::make_unique<Bullet>(CircleF(Vec2(pos.x, top), bulletRadius), Vec2(0.0f, -1.0f), Colors::Cyan, bulletSpeed, dmg));

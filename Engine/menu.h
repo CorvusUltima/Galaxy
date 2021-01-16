@@ -30,7 +30,7 @@ private:
 	    Bar() = default;
 	  	Bar(Vec2 & topLeft);
 		void Draw(Graphics & gfx);
-
+		void DrawSelector(Graphics& gfx, Menu& menu);
 
 		RectF rect = { 0, 0, 0, 0 };
 		Type type = Type::uninitialized;
@@ -48,6 +48,7 @@ private:
 		Surface musicSelect = Surface("musicSelect.bmp");
 		Surface back = Surface("back.bmp");
 		Surface backSelect = Surface("backSelect.bmp");
+	
 		
 	};
 
@@ -71,7 +72,7 @@ private:
 		Button() = default;
 		Button(Vec2& topLeft);
 		void Draw(Graphics& gfx);
-
+		void DrawSelector(Graphics& gfx, Menu& menu);
 	
 		RectF rect = { 0, 0, 0, 0 };
 		Type type = Type::uninitialized;
@@ -85,14 +86,16 @@ private:
 		Surface soundSelect = Surface("soundSelect.bmp");
 		Surface resume = Surface("resume.bmp");
 		Surface resumeSelect = Surface("resumeSelect.bmp");
+		Surface selector = Surface("leftpointer.bmp");
+		
 	};
 
 public:
 	Menu(const Vec2& topleft, int nbuttons,int nbars);
-	void DrawMenu(Graphics& gfx);
-	void DrawBar(Graphics& gfx);
+	void DrawMenu(Graphics& gfx, Menu& menu);
+	void DrawBar(Graphics& gfx, Menu& menu);
 	void Update(Keyboard& kbd, float dt);
-	void BarUpdate(Keyboard& kbd, float dt);
+	void BarUpdate(Keyboard& kbd, float dt, Graphics& gfx);
 	float SfxVolume();
 	Vec2 GetSelector();
 	bool bResume = false;

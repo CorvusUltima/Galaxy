@@ -31,6 +31,13 @@ void Menu::Button::Draw(Graphics& gfx)
 	}
 }
 
+void Menu::Button::DrawSelector(Graphics& gfx, Menu& menu)
+{
+	Surface selector = Surface("leftpointer.bmp");
+	gfx.DrawSprite(menu.selector.x, menu.selector.y - 10, selector);
+
+}
+
 
 Menu::Menu(const Vec2& topleft, int nbuttons,int nbars)
 	:
@@ -49,15 +56,6 @@ Menu::Menu(const Vec2& topleft, int nbuttons,int nbars)
 			buttons[i].type = Button::Type::resume;
 			break;
 		case 1:
-			buttons[i].type = Button::Type::sound;
-			break;
-		case 2:
-			buttons[i].type = Button::Type::sound;
-			break;
-		case 3:
-			buttons[i].type = Button::Type::sound;
-			break;
-		case 4:
 			buttons[i].type = Button::Type::sound;
 			break;
 		}
@@ -95,20 +93,25 @@ Menu::Menu(const Vec2& topleft, int nbuttons,int nbars)
 }
 
 
-void Menu::DrawMenu(Graphics& gfx)
+void Menu::DrawMenu(Graphics& gfx,Menu& menu)
 {
 	for (int i = 0; i < nbuttons; i++)
 	{
 		buttons[i].Draw(gfx);
+		buttons[i].DrawSelector(gfx, menu);
 	}
 }
 
-void Menu::DrawBar(Graphics& gfx)
+
+
+void Menu::DrawBar(Graphics& gfx,Menu&menu)
 {
 	for (int i = 0; i < nbars; i++)
 	{
 		bars[i].Draw(gfx);
+		bars[i].DrawSelector(gfx, menu);
 	}
+	
 }
 
 void Menu::Update(Keyboard& kbd, float dt)
@@ -162,7 +165,7 @@ void Menu::Update(Keyboard& kbd, float dt)
 	}
 }
 
-void Menu::BarUpdate(Keyboard& kbd, float dt)
+void Menu::BarUpdate(Keyboard& kbd, float dt,Graphics& gfx)
 {
 
 
@@ -244,10 +247,9 @@ void Menu::BarUpdate(Keyboard& kbd, float dt)
 	for (int i = 0; i < nbars; i++)
 	{
 		bars[i].BarIsSelected = BarSelector.y >bars[i].rect.top &&BarSelector.y < bars[i].rect.bottom;
+		
 	}
-
 	
-
 
 }
 
@@ -265,6 +267,7 @@ Menu::Bar::Bar(Vec2& topLeft)
 {
 	rect = RectF(topLeft, width, height);
 }
+
 
 void Menu::Bar::Draw(Graphics& gfx)
 {
@@ -292,5 +295,12 @@ void Menu::Bar::Draw(Graphics& gfx)
 
 	else
 	gfx.DrawRectEmpty((int)rect.left, (int)rect.top, (int)width+50, (int)height,3, Colors::White );
+
+}
+
+void Menu::Bar::DrawSelector(Graphics& gfx,Menu& menu)
+{
+	Surface barselector = Surface("leftpointer.bmp");
+	gfx.DrawSprite(menu.BarSelector.x, menu.BarSelector.y-10, barselector);
 
 }

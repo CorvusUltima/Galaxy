@@ -25,10 +25,10 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-    menu(Vec2(gfx.ScreenWidth/2,100),4,2),
+    menu(Vec2(gfx.ScreenWidth/2,100),2,0),
     barmenu(Vec2(gfx.ScreenWidth / 2-300, 150), 0, 3),
     space(fWorldSpeed, gfx),
-    boss(Boss::Model::lvl1,Vec2(200.0f,200.0f)),
+    boss(Boss::Model::lvl1,Vec2(400.0f,100.0f)),
     btn_diff_easy({ 350.0f, 445.0f, 550.0f, 585.0f }, Surface("btn_easy_unselected.bmp"), Surface("btn_easy_hovered.bmp"), Surface("btn_easy_selected.bmp")),
     btn_diff_normal({ 520.0f, 670.0f, 550.0f, 585.0f }, Surface("btn_normal_unselected.bmp"), Surface("btn_normal_hovered.bmp"), Surface("btn_normal_selected.bmp")),
     btn_diff_hard({ 745.0f, 845.0f, 550.0f, 585.0f }, Surface("btn_hard_unselected.bmp"), Surface("btn_hard_hovered.bmp"), Surface("btn_hard_selected.bmp")),
@@ -162,13 +162,21 @@ void Game::UpdateModel(float dt)
 
         space.Update(dt, gfx);
         def.Update(wnd.kbd, gfx, dt);
-        boss.Update(dt, gfx);
-        
+        if((int)space.GetDistance()>400) boss.Update(dt, gfx);
         
         for (int i = 0; i < boss.bullets.size(); i++)// update boss bullts 
         {
-           boss.bullets[i]->Update(dt);
+          if(!boss.bDead()) boss.bullets[i]->Update(dt);
            boss.bullets[i]->delete_offscreen(gfx); //Mark bullets that are off screen to be deleted
+           if (boss.bullets[i]->isTargetHit(CircleF(def.GetColCircle()))) //Check collision against def
+           {
+               def.TakeDmg(boss.GetDmg());
+               explo.push_back(std::make_unique<Explosion>(boss.bullets[i]->circle.center, Explosion::Size::Small)); //Create explosion at the site of impact
+               
+           }
+
+           if (boss.bullets[i]->bDeleted) boss.bullets.erase(std::remove(boss.bullets.begin(), boss.bullets.end(), boss.bullets[i]));
+           
 
         }
         
@@ -177,7 +185,8 @@ void Game::UpdateModel(float dt)
         for (int i = 0; i < def.bullets.size(); i++) //Update defender bullets
         {
             def.bullets[i]->Update(dt);
-            Laser.Play(1.0f, barmenu.SfxVolume());
+           
+             
             def.bullets[i]->delete_offscreen(gfx); //Mark bullets that are off screen to be deleted
             for (int j = 0; j < enemy.size(); j++)
             if (def.bullets[i]->isTargetHit(CircleF(enemy[j]->GetColCircle()))) //Check collision against all enemies
@@ -185,9 +194,19 @@ void Game::UpdateModel(float dt)
                 enemy[j]->TakeDmg(def.GetDmg());
                 if (enemy[j]->GetHealth() <= 0) def.AddScore(enemy[j]->fScore); //Update score if enemy is killed;
                 explo.push_back(std::make_unique<Explosion>(def.bullets[i]->circle.center, Explosion::Size::Small)); //Create explosion at the site of impact
+           
             }
-            if (def.bullets[i]->bDeleted) def.bullets.erase(std::remove(def.bullets.begin(), def.bullets.end(), def.bullets[i])); //Delete bullets if needed
-            
+            if ((int)space.GetDistance() > 400)
+            {
+                if (def.bullets[i]->isTargetHit(CircleF(boss.GetColCircle()))) //check colaision against Boss 
+                {
+                    boss.TakeDmg(def.GetDmg());
+                }
+
+                if (def.bullets[i]->bDeleted) def.bullets.erase(std::remove(def.bullets.begin(), def.bullets.end(), def.bullets[i])); //Delete bullets if needed
+              
+            }
+           
         }
         for (int i = 0; i < enemy.size(); i++) //Update enemies
         {
@@ -228,7 +247,7 @@ void Game::UpdateModel(float dt)
 
     case Game::GameState::Paused:   
         menu.Update(wnd.kbd, dt);
-        barmenu.BarUpdate(wnd.kbd, dt);
+        barmenu.BarUpdate(wnd.kbd, dt,gfx);
 
         if (menu.bResume && wnd.kbd.KeyIsPressed(VK_SPACE) && !menu.soundBarON)
         {
@@ -256,7 +275,7 @@ void Game::ComposeFrame()
         space.Draw(gfx); //Background
         numb.Draw(gfx.ScreenLeft + 20, gfx.ScreenBottom - 40, (int)space.GetDistance(), Colors::White, gfx); //Distance
         def.Draw(gfx);//Defender
-        boss.Draw(gfx);
+        if ((int)space.GetDistance() >400&& !boss.bDead()) boss.Draw(gfx);
         for (int i = 0; i < def.bullets.size(); i++) def.bullets[i]->Draw(gfx); //Defender bullets
 
         for (int i = 0; i < enemy.size(); i++) //Enemies
@@ -331,16 +350,16 @@ void Game::ComposeFrame()
 
       
 
-        if (!menu.bResume&&!menu.soundBarON) menu.DrawMenu(gfx);
+        if (!menu.bResume&&!menu.soundBarON) menu.DrawMenu(gfx,menu);
       
-       if (menu.soundBarON) barmenu.DrawBar(gfx);
+       if (menu.soundBarON) barmenu.DrawBar(gfx, barmenu);
 
     
 
        if (!menu.bResume && !wnd.kbd.KeyIsPressed(VK_SPACE) && !menu.soundBarON)
        {
 
-            menu.DrawMenu(gfx);
+            menu.DrawMenu(gfx,menu);
 
 
        }
@@ -388,6 +407,16 @@ void Game::SpawnEnemies()
                 SpawnEnemy(Enemy::Model::test, 600);
                 SpawnEnemy(Enemy::Model::test, 900);
 
+                isSpawned[nWave] = true;
+            }
+            break;
+        case 3:
+            if (distance >= 320)
+            {
+                SpawnEnemy(Enemy::Model::test, 300);
+                SpawnEnemy(Enemy::Model::test, 600);
+                SpawnEnemy(Enemy::Model::test, 900);
+                SpawnEnemy(Enemy::Model::test, 700);
                 isSpawned[nWave] = true;
             }
             break;
