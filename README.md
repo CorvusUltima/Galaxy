@@ -2,7 +2,6 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Upgrades](#Upgrades Info)
-* [D&C team](#D&C team)
 * [Setup](#setup)
 
 ## General info
@@ -15,12 +14,9 @@ https://www.youtube.com/watch?v=PwuIEMUFUnQ
 The goal of this software is exclusively to learn and master  concepts within software development and this is a working version of the same in constant updating .
 	    
 ## Technologies
-Project is created with:
-Upgraded version of the basic Chilli Framework by the D&C team.
+Upgraded version of the basic Chilli Framework created by the D&C team.
 C++
 VS 2019
-
-## Upgrades Info 
 
 
 ## D&C team
