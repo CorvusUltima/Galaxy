@@ -15,7 +15,7 @@ The goal of this software is exclusively to learn and master  concepts within so
 	
 ## Technologies
 Project is created with:
-The basic concept of the software is an upgrade of the Chili Framework in the basic version that comes with the following features
+ Software is an upgrade of the Chili Framework  basic version that comes with the following features
 
 Gfx: putpixel / screenwidth / height
 Color: getting / setting RGB color components
