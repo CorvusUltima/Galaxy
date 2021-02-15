@@ -46,21 +46,37 @@ Nemanja Pavlovic: pavlovicn88@gmail.com
 ## Setup
 To run this project, install it locally using GitLab link URL ;
 
+
 ## info
 
 To adapt the Framework to the needs of 2d programming, the following classes and functions have been added.
 
- ## Table of contents
+ ## Table of contents2
 * [Boss](#Boss)
 * [Bullet](#Bullet)
 * [Button](#Button)
 * [CircleF](#CircleF)
 
+
+
+
 ##Boss
+
+
+
 
 ##Bullet
 
+
+
+
+
 #Button
+
+
+
+
+
 
 #CircleF
 
