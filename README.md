@@ -51,7 +51,6 @@ To run this project, install it locally using GitLab link URL ;
 
 To adapt the Framework to the needs of 2d programming, the following classes and functions have been added.
 
- ## Table of contents2
 * [Boss](#Boss)
 * [Bullet](#Bullet)
 * [Button](#Button)
