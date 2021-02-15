@@ -1,21 +1,19 @@
 #pragma once
 #include"graphics.h"
 
-class Text
+ class Text
 {
 public:
 
-	const void DrawA(int x,int y, Graphics& gfx);
-	const void DrawB(int x,int y, Graphics& gfx);
-	const void DrawC(int x, int y, Graphics& gfx);
-
-	// To do :make a function that takes inputs and returns drawings of Text 
-
-	//void Print(char c,int x,int y);
-		
-
 	
+	static void Print(Graphics& gfx,std::string str, int x, int y);
+	static void DrawChar(Graphics&gfx,char c, int x, int y);
+	static int OffSet(char c);
 
+
+	static const void DrawA(int x,int y, Graphics& gfx);
+	static const void DrawB(int x,int y, Graphics& gfx);
+	static const void DrawC(int x, int y, Graphics& gfx);
 
 
 };

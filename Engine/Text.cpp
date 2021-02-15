@@ -1,5 +1,56 @@
 #include "Text.h"
 
+ void Text::Print(Graphics& gfx,std::string str, int x, int y)
+{
+	 int offSet = 0;
+	 
+	 for (int i = 0; i < str.length(); i++)
+	{
+		 offSet = OffSet(str[i]);
+
+		DrawChar(gfx,str[i],x+offSet,y);
+
+	}
+}
+ void Text::DrawChar(Graphics& gfx,char c, int x, int y)
+{
+
+	switch (c)
+	{
+	case'A':
+		DrawA(x, y,gfx);
+		break;
+	case 'B':
+		DrawB(x, y, gfx);
+		break;
+	case'C':
+		DrawB(x, y, gfx);
+		break;
+	}
+
+	
+}
+
+ int Text::OffSet(char c)
+ {
+	 switch(c)  {
+	 case 'A':
+
+	  return 29;
+	  break;
+
+	 case 'B':
+
+		 return 27;
+		 break;
+	 case 'C':
+
+		 return 25;
+		 break;
+	}
+ }
+
+
 const void Text::DrawA(int x, int y, Graphics& gfx)
 {
 	gfx.PutPixel(2 + x, 0 + y, 252, 252, 252);
@@ -1562,3 +1613,4 @@ const void Text::DrawC(int x, int y, Graphics& gfx)
 	gfx.PutPixel(24 + x, 24 + y, 254, 254, 254);
 
 }
+

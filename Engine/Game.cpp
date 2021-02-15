@@ -138,6 +138,8 @@ void Game::UpdateModel(float dt)
             btn_start_active.Update(wnd.kbd, pointer, dt);
         if (btn_start_active.bSelected) GameState = GameState::Loading;
 
+        
+
         break;
 
     case GameState::Loading:
@@ -248,6 +250,8 @@ void Game::UpdateModel(float dt)
     case Game::GameState::Paused:   
         menu.Update(wnd.kbd, dt);
         barmenu.BarUpdate(wnd.kbd, dt,gfx);
+        gfx.DrawRectDim(150, 200, 400, 100, Colors::White);
+        txt.Print(gfx, "CBAA", 150, 200);
 
         if (menu.bResume && wnd.kbd.KeyIsPressed(VK_SPACE) && !menu.soundBarON)
         {

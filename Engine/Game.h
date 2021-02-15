@@ -39,6 +39,7 @@
 #include"menu.h"
 #include"sound.h"
 #include "Boss.h"
+#include"Text.h"
 
 
 class Game
@@ -105,6 +106,8 @@ private:
 	Sound Laser;
 	Sound ExplosionLarge;
 	Sound ExplosionScif;
+	Text txt;
+	RectF rect;
 	float fElapsedTime = 0;
 
 	int nWave = -1; //Current wave of enemies
