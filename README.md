@@ -50,18 +50,15 @@ To run this project, install it locally using GitLab link URL ;
 ## info
 To adapt the Framework to the needs of 2d programming, the following classes and functions have been added.
 
- ### Table of contents
-* [Boss](##Boss)
+ *   [Boss.h](Engine/Boss.h).
+ 
+ *   [Boss.cpp](Engine/Boss.cpp).
+    
+ *   [Bullet.h](Engine/Bullet.h).
 
+ *   [Bullet.cpp](Engine/Bullet.cpp).
+   
 
-
-
-
-
-
-### Boss
-
-Ovo je kalsa koja je zstrana :) 
 
 
 
