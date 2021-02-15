@@ -50,10 +50,21 @@ To run this project, install it locally using GitLab link URL ;
 ## info
 To adapt the Framework to the needs of 2d programming, the following classes and functions have been added.
 
+ ### Table of contents
 * [Boss](##Boss)
-* [Bullet](##Bullet)
-* [Button](##Button)
-* [CircleF](##CircleF)
+
+
+
+
+
+
+
+### Boss
+
+Ovo je kalsa koja je zstrana :) 
+
+
+
 
 
 
