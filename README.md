@@ -2,15 +2,17 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [info](#info)
 
 ## General info
-This project is an implementation of the Framework in development by the D&C team.
-For more inforamtion following Framework :https://gitlab.com/CorvusUltima/framework
-inspired by Chilli tutorials for creating standalone 3d software
-for more information you can see the introduction to the series:
+The project aims to develop 2d software based && 
+inspired by Chilli tutorials for creating standalone 3d software.
+
+For more information you can see the introduction to the series:
 https://www.youtube.com/watch?v=PwuIEMUFUnQ
 
 The goal of this software is exclusively to learn and master  concepts within software development and this is a working version of the same in constant updating .
+
 	    
 ## Technologies
 Upgraded version of the basic Chilli Framework created by the D&C team.
@@ -40,17 +42,26 @@ Luka Bucan:
 Nemanja Pavlovic: pavlovicn88@gmail.com
 
 
-
-
-
-
-
-
-
 	
 ## Setup
 To run this project, install it locally using GitLab link URL ;
 
-```
+## info
 
-```
+To adapt the Framework to the needs of 2d programming, the following classes and functions have been added.
+
+ ## Table of contents
+* [Boss](#Boss)
+* [Bullet](#Bullet)
+* [Button](#Button)
+* [CircleF](#CircleF)
+
+##Boss
+
+##Bullet
+
+#Button
+
+#CircleF
+
+
